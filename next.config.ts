@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "varmepumpetipset.no",
+        hostname: "api.varmepumpetipset.no",
         pathname: "/**",
       },
     ],
