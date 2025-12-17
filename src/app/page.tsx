@@ -10,27 +10,25 @@ import { Metadata } from "next";
 const API_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000";
 
 export async function generateMetadata(): Promise<Metadata> {
-
   const doc: any = await getCachedHomePageData();
   const homeData = await JSON.parse(JSON.stringify(doc));
-
   const { metaTitle, heading, metaDescription, subHeading, metaKeywords, ogType, metaImage, ogImage, bannerImage, ogTitle, ogDescription, canonicalUrl, robots, jsonLd, publishedDate, lastUpdatedDate } = homeData.seo
 
   return generatePageMetadata({
-    title: metaTitle || heading || "Home | Varmepumpetipset.no",
-    description: metaDescription || subHeading || "Welcome to Varmepumpetipset.no — compare and find the best real estate agents in Norway.",
+    title: metaTitle || heading || "Home | Meglertip.no",
+    description: metaDescription || subHeading || "Welcome to Meglertip.no — compare and find the best real estate agents in Norway.",
     path: "/",
-    keywords: metaKeywords ? metaKeywords.split(",").map((k: string) => k.trim()).filter(Boolean) : ["varmepumpetipset", "real estate", "agents", "compare"],
+    keywords: metaKeywords ? metaKeywords.split(",")?.map((k: string) => k.trim()).filter(Boolean) : ["meglertip", "real estate", "agents", "compare"],
     type: ogType || "website",
     image: metaImage || ogImage || bannerImage || null,
-    ogTitle: ogTitle || metaTitle || "Home | Varmepumpetipset.no",
-    ogDescription: ogDescription || metaDescription || "Compare top real estate agents in Norway easily with Varmepumpetipset.no.",
+    ogTitle: ogTitle || metaTitle || "Home | Meglertip.no",
+    ogDescription: ogDescription || metaDescription || "Compare top real estate agents in Norway easily with Meglertip.no.",
     canonicalUrl: canonicalUrl,
     robots: robots || "index, follow",
     jsonLd: jsonLd || {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      name: "Varmepumpetipset.no",
+      name: "Meglertip.no",
       url: API_URL,
     },
     publishedDate: publishedDate,
@@ -39,7 +37,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage({ children }: { children: React.ReactNode }) {
-
   const doc = await getCachedThemeData()
   const themeData = await JSON.parse(JSON.stringify(doc));
   const theme = themeData.theme || Static_THEME
@@ -60,20 +57,20 @@ export default async function HomePage({ children }: { children: React.ReactNode
         '--color-formsteps': theme.formsteps,
       } as React.CSSProperties}
     >
-      {
-        children ? (
+      <>
+        <Navbar logo={logos.logo} logoText={logos.wordmark} />
+        <main>
           <>
-            <Navbar logo={logos.logo} logoText={logos.wordmark} />
-            <main>
-              <>
-                {children}
-              </>
-            </main>
-            <Footer logoText={logos.wordmark} />
+            {
+              children ?
+                children
+                :
+                <HeroPage />
+            }
           </>
-        ) : (
-          <HeroPage />
-        )}
+        </main>
+        <Footer logoText={logos.wordmark} />
+      </>
     </div >
   );
 }

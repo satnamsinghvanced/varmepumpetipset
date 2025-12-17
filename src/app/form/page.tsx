@@ -1,8 +1,9 @@
+import { getCachedFormSelect } from "@/services/form/form-select-service";
 import { getCachedFormData } from "@/services/form/form-service";
 import { generatePageMetadata } from "@/utils/metadata";
 import HomePage from "../page";
 import Form from "./form";
-import { getCachedFormSelect } from "@/services/form/form-select-service";
+export const dynamic = 'force-static';
 
 async function getFormData() {
   const doc: any = await getCachedFormData();
@@ -11,7 +12,6 @@ async function getFormData() {
 
 export async function generateMetadata() {
   const formData = await getFormData();
-
   const { metaTitle, metaDescription, metaKeywords, metaImage, ogTitle, ogDescription, canonicalUrl, robots, jsonLd, publishedDate, lastUpdatedDate, subHeading, heading, ogImage, ogType, image, slug } = formData
 
   return generatePageMetadata({
@@ -19,7 +19,7 @@ export async function generateMetadata() {
     description: metaDescription || subHeading || "Fill out the form to get in touch",
     path: slug || "/form",
     keywords: metaKeywords
-      ? metaKeywords.split(',').map((k: string) => k.trim()).filter(Boolean)
+      ? metaKeywords.split(',')?.map((k: string) => k.trim()).filter(Boolean)
       : ["form", "contact", "get in touch"],
     type: ogType || "website",
     image: metaImage || ogImage || image || null,
@@ -35,7 +35,6 @@ export async function generateMetadata() {
 
 const FormPage = async () => {
   const formPageData = await getFormData();
-  
   const doc: any = await getCachedFormSelect();
   const formSelect = await JSON.parse(JSON.stringify(doc));
 
@@ -45,7 +44,7 @@ const FormPage = async () => {
       <Form
         formSelect={formSelect}
         isMultiSelect={formPageData.multipleSelect}
-        pageTitle={formPageData.title}
+        pageTitle={formPageData?.title}
         pageDescription={formPageData.description}
         privacyText={formPageData.privacyText}
       />

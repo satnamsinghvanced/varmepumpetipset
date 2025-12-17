@@ -12,10 +12,11 @@ const Banner = async ({ BannerData }: any) => {
       <div className="absolute inset-0">
         <Image
           src={backgroundUrl}
-          alt="varmepumpetipset banner"
+          alt="meglertip banner"
           fill
-          className="object-cover"
+          className="object-cover max-h-[2000px]"
           priority
+          fetchPriority="high"
         />
       </div>
 

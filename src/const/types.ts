@@ -240,6 +240,7 @@ export interface HowItWorksProps {
   title?: string
   data?: any
   titleClass?: string
+  howItWorks?: boolean
 }
 
 export interface LogoProps {
@@ -334,4 +335,10 @@ export interface FormSelectButtonsProps {
   isInvalid?: boolean;
   touched?: boolean;
   onSelect: (formId: string) => void;
+}
+
+export interface EiendomsmeglerPageProps {
+  searchParams: {
+    [key: string]: string | string[] | undefined;
+  };
 }

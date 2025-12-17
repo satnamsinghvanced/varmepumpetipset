@@ -15,16 +15,16 @@ export async function generateMetadata() {
   const termsData = await getPageData()
   const { metaTitle, metaDescription, metaKeywords, metaImage, ogTitle, ogDescription, canonicalUrl, robots, jsonLd, publishedDate, lastUpdatedDate, title } = termsData
   return generatePageMetadata({
-    title: metaTitle || title || "Terms of Service | Varmepumpetipset.no",
-    description: metaDescription || "Varmepumpetipset.no terms of service page",
+    title: metaTitle || title || "Terms of Service | Meglertip.no",
+    description: metaDescription || "Meglertip.no terms of service page",
     path: "/terms",
     keywords: metaKeywords
-      ? metaKeywords.split(',').map((k: string) => k.trim()).filter(Boolean)
-      : ["terms of service", "varmepumpetipset", "legal", "user agreement", "terms and conditions"],
+      ? metaKeywords.split(',')?.map((k: string) => k.trim()).filter(Boolean)
+      : ["terms of service", "meglertip", "legal", "user agreement", "terms and conditions"],
     type: "website",
     image: metaImage || null,
-    ogTitle: ogTitle || metaTitle || title || "Terms of Service | Varmepumpetipset.no",
-    ogDescription: ogDescription || metaDescription || "Learn the terms of service for Varmepumpetipset.no",
+    ogTitle: ogTitle || metaTitle || title || "Terms of Service | Meglertip.no",
+    ogDescription: ogDescription || metaDescription || "Learn the terms of service for Meglertip.no",
     canonicalUrl: canonicalUrl || "/terms",
     robots: robots || "index, follow",
     jsonLd: jsonLd || {},
@@ -35,7 +35,6 @@ export async function generateMetadata() {
 
 const TermsPage = async () => {
   const termsData = await getPageData()
-
   if (!termsData) {
     return <NotFoundPage />;
   }
@@ -47,7 +46,7 @@ const TermsPage = async () => {
           <Breadcrumbs className="!mt-8  !m-0 !p-0" />
           <div className="mt-8">
             <h1 className="text-4xl md:text-6xl font-bold text-primary mb-4 leading-tight">
-              {termsData.title}
+              {termsData?.title}
             </h1>
             <p className="text-primary text-base mb-8">
               Last Update: {formatDate(termsData.updatedAt || termsData.createdAt)}
