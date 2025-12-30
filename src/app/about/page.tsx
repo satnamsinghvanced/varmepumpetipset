@@ -44,7 +44,6 @@ export async function generateMetadata() {
     image,
   } = aboutData;
   return generatePageMetadata({
-<<<<<<< HEAD
     title: metaTitle || heading || "About Meglertipset.no",
     description:
       metaDescription || subHeading || "Learn more about Meglertipset.no",
@@ -63,16 +62,6 @@ export async function generateMetadata() {
       metaDescription ||
       subHeading ||
       "Learn more about Meglertipset.no",
-=======
-    title: metaTitle || heading || "About Meglertip.no",
-    description: metaDescription || subHeading || "Learn more about Meglertip.no",
-    path: slug || "/about",
-    keywords: metaKeywords ? metaKeywords.split(',')?.map((k: string) => k.trim()).filter(Boolean) : ["about", "meglertip", "real estate"],
-    type: ogType || "website",
-    image: metaImage || ogImage || image || null,
-    ogTitle: ogTitle || metaTitle || heading || "About Meglertip.no",
-    ogDescription: ogDescription || metaDescription || subHeading || "Learn more about Meglertip.no",
->>>>>>> 1af58a38d1ff9c3c66554ba2e8a964c7534b2296
     canonicalUrl: canonicalUrl || "/about",
     robots: robots || "index, follow",
     jsonLd: jsonLd || {},
