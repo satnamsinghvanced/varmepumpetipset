@@ -2,7 +2,7 @@ import { ContactField, FormErrors, FormValues } from "@/const/types";
 
 export const validateField = (value: string, field: ContactField): string => {
     if (field.required && (!value || value.trim() === '')) {
-        return `${field.label} is required`;
+        return `${field.label} Er påkrevd`;
     }
 
     switch (field.type) {
@@ -29,7 +29,6 @@ export const validateField = (value: string, field: ContactField): string => {
         default:
             break;
     }
-
     return '';
 };
 
@@ -42,7 +41,6 @@ export const validateForm = (formData: FormValues, fields: ContactField[]): Form
             errors[field.name] = error;
         }
     });
-
     return errors;
 };
 

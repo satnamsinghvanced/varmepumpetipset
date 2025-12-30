@@ -2,22 +2,22 @@
 
 export const runtime = "nodejs";
 
-import { NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongoose";
 import {
-  User,
-  CollaboratePartner as Partner,
-  EmailTemplate,
-  SmtpConfig,
-  Counter,
   CollaboratePartner,
-  FormSelect,
+  Counter,
+  EmailTemplate,
+  CollaboratePartner as Partner,
   PartnerLimit,
+  SmtpConfig,
+  User,
 } from "@/lib/models/models";
-import nodemailer from "nodemailer";
+import { connectDB } from "@/lib/mongoose";
 import { getTimeAgo } from "@/utils/getTimeAgo";
+import { NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 
 let MAX_PARTNERS: any = 0;
+let uniqueId: number = 0;
 export async function POST(req: Request) {
   try {
     await connectDB();
@@ -30,24 +30,15 @@ export async function POST(req: Request) {
       req.headers.get("x-forwarded-for")?.split(",").shift() ||
       req.headers.get("x-real-ip");
 
-    console.log("📥 ========== RECEIVED REQUEST ==========");
-    // console.log("User Fields:", JSON.stringify(userFields, null, 2));
-
-    // Get counter for unique ID
     const counter = await Counter.findOneAndUpdate(
       { model: "User" },
       { $inc: { count: 1 } },
       { new: true, upsert: true }
     );
 
-    const uniqueId = counter.count;
-    console.log(`🆔 Generated unique ID: ${uniqueId}`);
-
+    uniqueId = counter.count;
     const userValues = userFields[0]?.values || {};
-    console.log("📋 Extracted user values:", userValues);
-
-    const timeDuration = getTimeAgo("2s"); // pass value like 1s 5m 2h 1d
-    console.log("timeDuration: ", timeDuration);
+    const timeDuration = getTimeAgo("2s");
     const userEmail = userValues.email;
     const userPhone = userValues.phone;
 
@@ -78,7 +69,6 @@ export async function POST(req: Request) {
       byPhone: recentByPhone ? "Found" : "None",
     });
 
-    // Block if ANY of the checks found a recent submission
     if (recentByIp || recentByEmail || recentByPhone) {
       const foundBy = [];
       if (recentByIp) foundBy.push("IP address");
@@ -106,18 +96,15 @@ export async function POST(req: Request) {
       userValues: userValues,
       ip: ipAddress,
     });
-
-    console.log(`✅ User created with ID: ${user._id}`);
-
-    // Fetch all active partners
+    const userUniqueId = user.uniqueId;
     const partners = await CollaboratePartner.find({ isActive: true });
-    console.log(`👥 Total active partners: ${partners.length}`);
+    console.log(`Total active partners: ${partners.length}`);
 
     let partnerArray = [...partners];
-    console.log("\n🔍 ========== STARTING FILTERING PROCESS ==========");
+    console.log("\n========== STARTING FILTERING PROCESS ==========");
     console.log(`Initial partner count: ${partnerArray.length}`);
 
-    console.log("\n📍 ========== STEP 1: POSTAL CODE MATCHING ==========");
+    console.log("\n========== STEP 1: POSTAL CODE MATCHING ==========");
     console.log(`User postal code: ${userValues.postalCode}`);
 
     const postalFiltered = [];
@@ -137,26 +124,24 @@ export async function POST(req: Request) {
       };
       postalMatchLog.push(logEntry);
 
-      console.log(
-        `  ${partner.name}: ${matches ? "✅ MATCHES" : "❌ NO MATCH"}`
-      );
+      console.log(`  ${partner.name}: ${matches ? "MATCHES" : "NO MATCH"}`);
       if (matches) {
         postalFiltered.push(partner);
       }
     }
 
     partnerArray = postalFiltered;
-    console.log(
-      `✅ After postal code matching: ${partnerArray.length} partners`
-    );
+    console.log(`After postal code matching: ${partnerArray.length} partners`);
 
-    console.log("\n🎯 ========== STEP 2: WISHES EXACT MATCHING ==========");
+    console.log("\n========== STEP 2: WISHES EXACT MATCHING ==========");
 
     const wishesFiltered = [];
     const wishesMatchLog = [];
 
     for (const partner of partnerArray) {
       const matches = Boolean(isWishesMatch(partner, userValues));
+      console.log("partner:--- ", partner);
+      console.log("userValues:--- ", userValues);
       const logEntry = {
         partnerName: partner.name,
         partnerId: partner._id,
@@ -167,12 +152,10 @@ export async function POST(req: Request) {
       };
       wishesMatchLog.push(logEntry);
 
-      console.log(`\n  📝 Checking wishes for ${partner.name}:`);
+      console.log(`\n  Checking wishes for ${partner.name}:`);
       console.log(`    Wishes: ${JSON.stringify(partner.wishes)}`);
       console.log(
-        `    Result: ${
-          matches ? "✅ ALL WISHES MATCH" : "❌ WISHES NOT MATCHED"
-        }`
+        `    Result: ${matches ? "ALL WISHES MATCH" : "WISHES NOT MATCHED"}`
       );
       if (matches) {
         wishesFiltered.push(partner);
@@ -180,9 +163,9 @@ export async function POST(req: Request) {
     }
 
     partnerArray = wishesFiltered;
-    console.log(`\n✅ After wishes matching: ${partnerArray.length} partners`);
+    console.log(`\nAfter wishes matching: ${partnerArray.length} partners`);
 
-    console.log("\n📊 ========== STEP 3: MONTHLY LIMIT CHECK ==========");
+    console.log("\n========== STEP 3: MONTHLY LIMIT CHECK ==========");
 
     const limitFiltered = [];
     const limitCheckLog = [];
@@ -201,7 +184,7 @@ export async function POST(req: Request) {
 
       console.log(
         `  ${partner.name}: ${
-          limitReached ? "❌ LIMIT REACHED" : "✅ LIMIT AVAILABLE"
+          limitReached ? "LIMIT REACHED" : "LIMIT AVAILABLE"
         }`
       );
       if (!limitReached) {
@@ -210,11 +193,9 @@ export async function POST(req: Request) {
     }
 
     partnerArray = limitFiltered;
-    console.log(
-      `✅ After monthly limit check: ${partnerArray.length} partners`
-    );
+    console.log(`After monthly limit check: ${partnerArray.length} partners`);
 
-    console.log("\n🏆 ========== STEP 4-6: PRIORITY SORTING ==========");
+    console.log("\n========== STEP 4-6: PRIORITY SORTING ==========");
 
     const sortingLog: any = [];
 
@@ -245,7 +226,11 @@ export async function POST(req: Request) {
 
       partnerArray = sortPartnersByPriority(partnerArray);
 
-      console.log("\n✅ After sorting (in priority order):");
+      // partner filter : first which have max leads last month
+      partnerArray.sort((a, b) => (b.leads?.lastMonth ?? 0) - (a.leads?.lastMonth ?? 0));
+      // console.log(`partnerArray after sorting:--- ${partnerArray}`)
+
+      console.log("\nAfter sorting (in priority order):");
       partnerArray.forEach((p, i) => {
         console.log(
           `  ${i + 1}. ${p.name}: Premium=${p.isPremium}, LastMonthLeads=${
@@ -256,7 +241,7 @@ export async function POST(req: Request) {
     }
 
     console.log(
-      `\n🎯 ========== STEP 7: SELECT TOP ${MAX_PARTNERS} PARTNERS ==========`
+      `\n========== STEP 7: SELECT TOP ${MAX_PARTNERS} PARTNERS ==========`
     );
 
     const selectedPartners = partnerArray.slice(0, MAX_PARTNERS);
@@ -279,9 +264,9 @@ export async function POST(req: Request) {
       console.log(`  ${i + 1}. ${p.name} (${p.email})`);
     });
 
-    console.log("\n💾 ========== PREPARING DATA FOR STORAGE ==========");
+    console.log("\n========== PREPARING DATA FOR STORAGE ==========");
 
-    const partnerEmailsData = selectedPartners.map((p) => ({
+    const partnerEmailsData = selectedPartners?.map((p) => ({
       partnerId: p._id,
       email: p.email,
       companyName: p.name || p.companyName || "Unknown Company",
@@ -289,12 +274,12 @@ export async function POST(req: Request) {
       status: "pending",
     }));
 
-    // const leadTypesData = selectedPartners.map(p => ({
+    // const leadTypesData = selectedPartners?.map(p => ({
     //   partnerId: p._id,
     //   leadTypes: p.leadTypes || []
     // }));
 
-    console.log("\n📊 ========== CREATING COMPREHENSIVE LOG ==========");
+    console.log("\n========== CREATING COMPREHENSIVE LOG ==========");
 
     const comprehensiveLog = {
       // User information
@@ -378,7 +363,7 @@ export async function POST(req: Request) {
       },
 
       // Final selection details
-      selectedPartners: selectedPartners.map((p) => ({
+      selectedPartners: selectedPartners?.map((p) => ({
         partnerId: p._id,
         name: p.name,
         email: p.email,
@@ -412,16 +397,37 @@ export async function POST(req: Request) {
       2
     );
 
-    // console.log("✅ Comprehensive log created: ", logString);
+    // console.log("Comprehensive log created: ", logString);
     console.log(`Log size: ${logString.length} characters`);
     console.log(`Log structure: ${Object.keys(comprehensiveLog).join(", ")}`);
 
-    console.log("\n📝 ========== UPDATING USER RECORD ==========");
+    console.log("\n========== UPDATING USER RECORD ==========");
+    const formId: string | null = userFields?.[0]?.formId ?? null;
+
+    let totalProfit = 0;
+
+    const partnerWithPrice = selectedPartners.map((partner) => {
+      let leadPrice = 0;
+
+      const matchedLeadType = partner.leadTypes?.find(
+        (lt: any) => lt.typeId?.toString() === formId?.toString()
+      );
+
+      if (matchedLeadType) {
+        leadPrice = matchedLeadType.price;
+      }
+
+      totalProfit += leadPrice;
+
+      return {
+        partnerId: partner._id,
+        leadPrice: leadPrice,
+      };
+    });
 
     const updateData: any = {
-      partnerIds: selectedPartners.map((p) => p._id),
-      // partnerEmails: partnerEmailsData,
-      // leadTypes: leadTypesData,
+      partnerIds: partnerWithPrice,
+      profit: totalProfit,
       status: "Pending",
       log: logString,
       logSummary,
@@ -429,22 +435,33 @@ export async function POST(req: Request) {
 
     await User.findByIdAndUpdate(user._id, updateData);
 
-    // console.log("✅ User record updated with initial data updateData: ", updateData);
+    // console.log("User record updated with initial data updateData: ", updateData);
 
     if (selectedPartners.length > 0) {
-      console.log("\n📈 ========== UPDATING PARTNER LEADS COUNT ==========");
+      console.log("\n========== UPDATING PARTNER LEADS COUNT ==========");
       await updatePartnerLeadsCount(selectedPartners);
     }
 
     let emailResults = [];
     let finalStatus = "Pending";
+    if (selectedPartners.length === 0) {
+      finalStatus = "Reject";
 
+      await User.findByIdAndUpdate(user._id, {
+        status: "Reject",
+        rejectionReason: "No matching partners found",
+        emailSentAt: new Date(),
+      });
+
+      console.log("No partners found → Lead rejected");
+    }
     if (selectedPartners.length > 0) {
-      console.log("\n📧 ========== SENDING EMAILS TO PARTNERS ==========");
+      console.log("\n========== SENDING EMAILS TO PARTNERS ==========");
       emailResults = await sendMailToPartners(
         selectedPartners,
         userValues,
-        partnerEmailsData
+        partnerEmailsData,
+        userUniqueId
       );
 
       // Check if at least one email was sent successfully
@@ -453,21 +470,21 @@ export async function POST(req: Request) {
         (r) => r.status === "failed"
       ).length;
 
-      console.log(`📊 Email results: ${sentCount} sent, ${failedCount} failed`);
+      console.log(`Email results: ${sentCount} sent, ${failedCount} failed`);
 
       // Update status based on email sending results
       if (sentCount > 0) {
         finalStatus = "Complete";
         console.log(
-          `✅ Status updated to: ${finalStatus} (${sentCount} email(s) sent successfully)`
+          `Status updated to: ${finalStatus} (${sentCount} email(s) sent successfully)`
         );
       } else {
         finalStatus = "Pending";
-        console.log(`⚠️ Status remains: ${finalStatus} (No emails processed)`);
+        console.log(`Status remains: ${finalStatus} (No emails processed)`);
       }
 
       if (failedCount > 0) {
-        console.error("❌ Email failures:");
+        console.error("Email failures:");
         emailResults
           .filter((r) => r.status === "failed")
           .forEach((f) => {
@@ -477,13 +494,48 @@ export async function POST(req: Request) {
     }
 
     // Final update to user document with email results and final status
-    await User.findByIdAndUpdate(user._id, {
-      partnerEmails: emailResults,
-      status: finalStatus,
-      emailSentAt: new Date(), // Add timestamp for when emails were sent
-    });
+    await User.findByIdAndUpdate(
+      user._id,
+      {
+        $set: {
+          emailResults: emailResults.map((r) => ({
+            partnerId: r.partnerId,
+            email: r.email,
+            status: r.status,
+            sentAt: r.sentAt || new Date(),
+            error: r.error || null,
+          })),
+          status: finalStatus,
 
-    console.log("\n✅ ========== PROCESSING COMPLETE ==========");
+        },
+      },
+      { new: true, runValidators: true }
+    );
+
+    let leadEmailResult = null;
+
+    if (selectedPartners.length > 0) {
+      try {
+        console.log("\n========== SENDING EMAIL TO LEAD ==========");
+
+        const leadTemplate = await getLeadEmailTemplate();
+
+        leadEmailResult = await sendMailToLead(
+          userValues,
+
+          selectedPartners,
+          uniqueId
+        );
+
+        console.log("Lead email sent:", leadEmailResult);
+      } catch (err: any) {
+        console.error("Lead email failed:", err.message);
+      }
+    } else {
+      console.log("No partners found → Lead email not sent");
+    }
+
+    console.log("\n========== PROCESSING COMPLETE ==========");
     console.log(`Final user status: ${finalStatus}`);
 
     const statistics = {
@@ -501,7 +553,7 @@ export async function POST(req: Request) {
       ],
     };
 
-    const emailResultLog = emailResults.map((r) => ({
+    const emailResultLog = emailResults?.map((r) => ({
       partnerId: r.partnerId,
       email: r.email,
       status: r.status,
@@ -511,15 +563,18 @@ export async function POST(req: Request) {
       success: true,
       message: "Leads processed successfully",
       status: finalStatus,
+      partners: selectedPartners?.map((p) => ({
+        name: p.name || p.partnerName || "Unknown",
+      })),
     };
 
-    console.log("📊 Final Statistics:");
+    console.log("Final Statistics:");
     console.log("statistics", JSON.stringify(statistics, null, 2));
     console.log("emailResultLog: ", emailResultLog);
 
     return NextResponse.json(response);
   } catch (error: any) {
-    console.error("❌ ========== PROCESSING ERROR ==========");
+    console.error("========== PROCESSING ERROR ==========");
     console.error("Error:", error.message);
     console.error("Stack:", error.stack);
 
@@ -595,146 +650,84 @@ function matchPostalCode(
 /**
  * STEP 2: Wish matching - Updated with selectedFormType handling
  */
-const isWishesMatch = async (partner: any, userValues: any) => {
+const isWishesMatch = (partner: any, userValues: any) => {
   const partnerWishes = partner.wishes || [];
 
-  // If partner has no wishes, automatically match
-  if (!partnerWishes || partnerWishes.length === 0) {
-    console.log("  No wishes defined - automatically matching");
-    return true;
-  }
-
-  console.log(`  Checking wishes for ${partner.name}:`);
-  console.log(`  User provided these fields:`, Object.keys(userValues));
-
-  // SPECIAL MAPPING for your specific data structure
-  const fieldMapping: Record<string, string> = {
-    preferranceType: "selectedFormTitle",
-  };
-
-  // Track wishes for logging
-  const checkedWishes: string[] = [];
-  const skippedWishes: string[] = [];
+  // No wishes → auto match
+  if (!partnerWishes.length) return true;
 
   for (const wish of partnerWishes) {
-    if (!wish.question) {
-      console.log("  Skipping wish with no question");
-      continue;
-    }
-
-    const question = wish.question;
-    const expectedAnswers = wish.expectedAnswer || [];
-
-    console.log(`\n  📋 Partner ${partner.name} has wish for: ${question}`);
-    console.log(`    Expected answers: ${JSON.stringify(expectedAnswers)}`);
-
-    // Check mapped field name first, then original
-    const mappedField = fieldMapping[question] || question;
-
-    // Check if this field exists in user values AT ALL
-    // Important: We check if the property exists, not just if it has a value
-    const fieldExistsInUser = userValues.hasOwnProperty(mappedField);
-
-    if (!fieldExistsInUser) {
-      console.log(
-        `    ⏭️  SKIPPING - User didn't provide "${mappedField}" field at all`
-      );
-      skippedWishes.push(question);
-      continue; // Skip this wish entirely - user didn't even have this field
-    }
-
-    checkedWishes.push(question);
-
-    let userAnswer = userValues[mappedField];
-
-    // If not found in mapped field, try original (though this shouldn't happen since we already checked)
-    if (
-      (userAnswer === undefined || userAnswer === null || userAnswer === "") &&
-      mappedField !== question
-    ) {
-      userAnswer = userValues[question];
-    }
-
-    console.log(
-      `    Checking user's value for "${mappedField}": "${userAnswer}"`
-    );
-
-    // If expectedAnswers array is empty or contains only empty string, accept any answer
-    if (
-      expectedAnswers.length === 0 ||
-      (expectedAnswers.length === 1 && expectedAnswers[0] === "")
-    ) {
-      console.log(`    ✅ Accepting any answer (empty expectedAnswers)`);
-      continue;
-    }
-
-    // IMPORTANT: User provided this field, so now we check it
-    // Even if the user left it empty (undefined/null/""), we need to check
-
-    // Convert user answer to string and trim
-    const userAnswerStr = String(userAnswer || "").trim();
-
-    // Check if user's answer exists in expectedAnswers array
-    // Also trim expected answers for comparison
-    const hasMatch = expectedAnswers.some((expected: any) => {
-      const expectedStr = String(expected).trim();
-      const match = expectedStr === userAnswerStr;
-      return match;
-    });
-
-    if (hasMatch) {
-      console.log(`    ✅ MATCH: "${userAnswerStr}" matches expected`);
-    } else {
-      console.log(
-        `    ❌ NO MATCH: "${userAnswerStr}" not found in expected answers`
-      );
-      console.log(
-        `       Expected: ${JSON.stringify(
-          expectedAnswers.map((e: any) => `"${String(e).trim()}"`)
-        )}`
-      );
+    if (!wish.question || wish.question.trim() === "") {
+      console.log("Wish question empty → FAIL");
       return false;
     }
-  }
 
-  // Summary log
-  console.log(`\n  📊 WISH CHECK SUMMARY for ${partner.name}:`);
-  console.log(`    Total partner wishes: ${partnerWishes.length}`);
-  console.log(
-    `    Checked (user provided fields): ${
-      checkedWishes.length
-    } - ${checkedWishes.join(", ")}`
-  );
-  console.log(
-    `    Skipped (user didn't provide): ${
-      skippedWishes.length
-    } - ${skippedWishes.join(", ")}`
-  );
+    const question = wish.question.trim();
+    const expected = wish.expectedAnswer || [];
 
-  if (checkedWishes.length === 0) {
-    console.log(
-      `  ⚠️  No relevant wishes to check (user didn't provide any matching fields)`
+    // Mapping
+    const fieldMapping: any = {
+      leadType: "selectedFormTitle",
+      preferranceType: "selectedFormTitle",
+    };
+
+    const field = fieldMapping[question] || question;
+
+    // USER DOES NOT HAVE FIELD → FAIL
+    if (!userValues.hasOwnProperty(field)) {
+      console.log(`Missing user field: ${field} → FAIL`);
+      return false;
+    }
+
+    const userAnswer = String(userValues[field] || "").trim();
+
+    // EMPTY EXPECTEDANSWER → FAIL
+    if (
+      expected.length === 0 ||
+      (expected.length === 1 && expected[0].trim() === "")
+    ) {
+      console.log("Expected answer empty → FAIL");
+      return false;
+    }
+
+    const isMatch = expected.some(
+      (ans: any) => String(ans).trim() === userAnswer
     );
-    return true; // No relevant fields to check, so match passes
+
+    // WRONG ANSWER → FAIL
+    if (!isMatch) {
+      console.log(`Value mismatch for ${question}`);
+      console.log(`   user="${userAnswer}" expected="${expected}"`);
+      return false;
+    }
+
+    console.log(`✔ Wish matched: ${question}`);
   }
 
-  console.log(`  ✅ All checked wishes matched for ${partner.name}`);
-  return true;
+  return true; // All wishes matched
 };
 
 /**
  * STEP 3: Monthly limit check
  */
+// function isMonthlyLimitReached(partner: any): boolean {
+//   // If no maxLeadsPerMonth is set, assume no limit
+//   if (!partner.maxLeadsPerMonth) {
+//     return false;
+//   }
+
+//   const currentMonthLeads = partner.leads?.currentMonth || 0;
+//   const maxLeads = partner.maxLeadsPerMonth;
+
+//   return currentMonthLeads >= maxLeads;
+// }
 function isMonthlyLimitReached(partner: any): boolean {
-  // If no maxLeadsPerMonth is set, assume no limit
-  if (!partner.maxLeadsPerMonth) {
-    return false;
-  }
+  const monthlyLimit = partner.leads?.total || 0;
 
-  const currentMonthLeads = partner.leads?.currentMonth || 0;
-  const maxLeads = partner.maxLeadsPerMonth;
+  // 0 = unlimited
+  if (monthlyLimit === 0) return false;
 
-  return currentMonthLeads >= maxLeads;
+  return (partner.leads?.currentMonth || 0) >= monthlyLimit;
 }
 
 /**
@@ -766,21 +759,29 @@ function sortPartnersByPriority(partners: any[]): any[] {
 /**
  * Update partner leads count
  */
-async function updatePartnerLeadsCount(partners: any[]) {
-  const updatePromises = partners.map((partner) =>
-    Partner.findByIdAndUpdate(
-      partner._id,
-      {
-        $inc: {
-          "leads.currentMonth": 1,
-          "leads.total": 1,
-        },
-      },
-      { new: true }
-    )
-  );
+// async function updatePartnerLeadsCount(partners: any[]) {
+//   const updatePromises = partners?.map((partner) =>
+//     Partner.findByIdAndUpdate(
+//       partner._id,
+//       {
+//         $inc: {
+//           "leads.currentMonth": 1,
+//           "leads.total": 1,
+//         },
+//       },
+//       { new: true }
+//     )
+//   );
 
-  await Promise.all(updatePromises);
+//   await Promise.all(updatePromises);
+// }
+async function updatePartnerLeadsCount(partners: any[]) {
+  await Partner.updateMany(
+    { _id: { $in: partners.map(p => p._id) } },
+    {
+      $inc: { "leads.currentMonth": 1 },
+    }
+  );
 }
 
 /**
@@ -789,7 +790,8 @@ async function updatePartnerLeadsCount(partners: any[]) {
 async function sendMailToPartners(
   partners: any[],
   userValues: any,
-  partnerEmailsData: any[]
+  partnerEmailsData: any[],
+  userUniqueId: number
 ) {
   if (!partners.length) {
     return partnerEmailsData;
@@ -800,7 +802,7 @@ async function sendMailToPartners(
     const smtpData = await SmtpConfig.findOne();
 
     if (!smtpData) {
-      return partnerEmailsData.map((data) => ({
+      return partnerEmailsData?.map((data) => ({
         ...data,
         status: "failed",
         error: "No SMTP configuration",
@@ -828,10 +830,15 @@ async function sendMailToPartners(
       const emailData = partnerEmailsData[i];
 
       try {
-        const html = generatePartnerEmail(partner, userValues, activeTemplate);
+        const html = generatePartnerEmail(
+          partner,
+          userValues,
+          activeTemplate,
+          userUniqueId
+        );
 
         const mailOptions = {
-          from: `"Varmepumpetipset Lead" <${smtpData.user}>`,
+          from: `"Meglertip Lead" <${smtpData.user}>`,
           to: partner.email,
           subject: activeTemplate.subject,
           html: html,
@@ -858,7 +865,7 @@ async function sendMailToPartners(
 
     return results;
   } catch (error: any) {
-    return partnerEmailsData.map((data) => ({
+    return partnerEmailsData?.map((data) => ({
       ...data,
       status: "failed",
       error: error.message,
@@ -876,11 +883,105 @@ async function getActiveEmailTemplate() {
   return activeTemplate;
 }
 
+async function getLeadEmailTemplate() {
+  const template = await EmailTemplate.findOne({
+    name: "To the lead when they complete a form",
+  });
+
+  if (!template) {
+    throw new Error("Lead email template not found or inactive");
+  }
+
+  return template;
+}
+
+function generateLeadEmail(
+  userValues: any,
+  template: any,
+  partners: any[],
+  uniqueId: number
+) {
+  let emailBody = template.body;
+
+  const partnerNames = partners
+    .map((p) => p.name || p.companyName)
+    .filter(Boolean);
+
+  const placeholders: Record<string, string> = {
+    "[partner 1]": partnerNames[0] || "",
+    "[Full name]": userValues.name || "User",
+    "[partner 2]": partnerNames[1] || "",
+    "[partner 3]": partnerNames[2] || "",
+    "[Id]": uniqueId?.toString() || "N/A",
+  };
+
+  Object.entries(placeholders).forEach(([key, value]) => {
+    const regex = new RegExp(key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g");
+    emailBody = emailBody.replace(regex, value);
+  });
+
+  return emailBody;
+}
+
+async function sendMailToLead(
+  userValues: any,
+  selectedPartners: any[],
+  uniqueId: number
+) {
+  if (!userValues?.email) {
+    console.log("No user email found, skipping lead email");
+    return null;
+  }
+
+  const smtpData = await SmtpConfig.findOne();
+  if (!smtpData) {
+    throw new Error("No SMTP configuration found");
+  }
+
+  const template = await getLeadEmailTemplate();
+
+  const transporter = nodemailer.createTransport({
+    host: smtpData.host,
+    port: smtpData.port,
+    secure: smtpData.secure,
+    auth: {
+      user: smtpData.user,
+      pass: smtpData.pass,
+    },
+  });
+
+  await transporter.verify();
+
+  const html = generateLeadEmail(
+    userValues,
+    template,
+    selectedPartners,
+    uniqueId
+  );
+
+  const mailOptions = {
+    from: `"Meglertipset" <${smtpData.user}>`,
+    to: userValues.email,
+    subject: template.subject,
+    html,
+  };
+
+  const info = await transporter.sendMail(mailOptions);
+
+  return {
+    email: userValues.email,
+    status: "sent",
+    messageId: info.messageId,
+    sentAt: new Date(),
+  };
+}
+
 // Generate email HTML
 function generatePartnerEmail(
   partner: any,
   userValues: any,
-  activeTemplate: any
+  activeTemplate: any,
+  userUniqueId: number
 ) {
   if (!activeTemplate || !activeTemplate.body) {
     return "<h1>New Lead Received</h1><p>Please check the system for details.</p>";
@@ -888,7 +989,7 @@ function generatePartnerEmail(
 
   let emailBody = activeTemplate.body;
 
-  console.log("📧 Generating email with placeholders:");
+  console.log("Generating email with placeholders:");
   console.log("Template body preview:", emailBody.substring(0, 200) + "...");
   console.log("User values available:", userValues);
 
@@ -898,6 +999,7 @@ function generatePartnerEmail(
   );
 
   const placeholderMappings: Record<string, string> = {
+    "[Id]": String(userUniqueId) || "N/A",
     "[Full name]": userValues.name || "N/A",
     "[Full number]": userValues.phone || "N/A",
     "[Full email]": userValues.email || "N/A",
@@ -923,7 +1025,6 @@ function generatePartnerEmail(
     "{userPreferranceType}":
       userValues.preferranceType || userValues.selectedFormTitle || "N/A",
     "{currentDate}": new Date().toLocaleDateString("no-NO"),
-    "{leadId}": userValues.uniqueId || "N/A",
   };
 
   const foundPlaceholders: string[] = [];
@@ -951,15 +1052,12 @@ function generatePartnerEmail(
 
   if (remainingSquareBrackets.length > 0) {
     console.warn(
-      "⚠️ Unreplaced square bracket placeholders:",
+      "Unreplaced square bracket placeholders:",
       remainingSquareBrackets
     );
   }
   if (remainingCurlyBraces.length > 0) {
-    console.warn(
-      "⚠️ Unreplaced curly brace placeholders:",
-      remainingCurlyBraces
-    );
+    console.warn("Unreplaced curly brace placeholders:", remainingCurlyBraces);
   }
 
   return emailBody;

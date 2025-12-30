@@ -8,14 +8,15 @@ const Banner = async ({ BannerData }: any) => {
   const backgroundUrl = `${IMAGE_URL}${BannerData?.backgroundImage || "uploads/bg-1.webp"}`;
 
   return (
-    <div className="relative h-screen bg-cover bg-center"    >
+    <div className="relative max-h-[calc(100vh-82px)] h-[calc(100vh-82px)] bg-cover bg-center flex items-center justify-center">
       <div className="absolute inset-0">
         <Image
           src={backgroundUrl}
-          alt="varmepumpetipset banner"
+          alt="meglertip banner"
           fill
-          className="object-cover"
+          className="object-cover max-h-[2000px]"
           priority
+          fetchPriority="high"
         />
       </div>
 
