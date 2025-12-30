@@ -32,6 +32,7 @@ export async function generateMetadata({
   const finalCanonical = canonicalUrl ?? (page > 1 ? `${pathname}?page=${page}` : pathname);
 
   return generatePageMetadata({
+<<<<<<< HEAD
     title: metaTitle || `${category} Articles | Byggtipset.no`,
     description: metaDescription || `Read expert articles about ${category} on Byggtipset.no.`,
     path: finalCanonical,
@@ -40,6 +41,16 @@ export async function generateMetadata({
     image: ogImage || null,
     ogTitle: ogTitle || metaTitle || `${category} Articles | Byggtipset.no`,
     ogDescription: ogDescription || metaDescription || `Explore helpful ${category} articles from Byggtipset.no.`,
+=======
+    title: metaTitle || `${category} Articles | Meglertip.no`,
+    description: metaDescription || `Read expert articles about ${category} on Meglertip.no.`,
+    path: finalCanonical,
+    keywords: metaKeywords ? metaKeywords.split(",")?.map((k: string) => k.trim()).filter(Boolean) : ["meglertip", category, "real estate", "articles"],
+    type: ogType || "website",
+    image: ogImage || null,
+    ogTitle: ogTitle || metaTitle || `${category} Articles | Meglertip.no`,
+    ogDescription: ogDescription || metaDescription || `Explore helpful ${category} articles from Meglertip.no.`,
+>>>>>>> 1af58a38d1ff9c3c66554ba2e8a964c7534b2296
     canonicalUrl: finalCanonical,
     robots: robots || "index, follow",
     jsonLd: jsonLd || {

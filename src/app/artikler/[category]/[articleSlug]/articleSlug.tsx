@@ -23,8 +23,8 @@ const ArticleSlug = async ({ slugValue }: ArticleProps) => {
         {article?.image && (
           <Image
             src={`${imageBaseUrl}${article?.image}`}
-            width={100}
-            height={100}
+            width={1440}
+            height={720}
             alt={`${article?.title} image`}
             className="w-full rounded-2xl mb-6"
             loading="lazy"
@@ -48,8 +48,8 @@ const ArticleSlug = async ({ slugValue }: ArticleProps) => {
             {article?.image && (
               <Image
                 src={`${imageBaseUrl}${article?.image}`}
-                width={100}
-                height={100}
+                width={1440}
+                height={720}
                 alt={`${article?.title} image`}
                 className="w-full rounded-2xl mb-6"
                 loading="lazy"

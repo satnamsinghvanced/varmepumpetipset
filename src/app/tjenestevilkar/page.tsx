@@ -15,7 +15,7 @@ export async function generateMetadata() {
     return generatePageMetadata({
       title: "Terms of Service | Meglertipset.no",
       description: "Meglertipset.no terms of service page",
-      path: "/terms-of-service",
+      path: "/tjenestevilkar",
     });
   }
   const {
@@ -33,22 +33,21 @@ export async function generateMetadata() {
     title,
   } = termsData;
   return generatePageMetadata({
-<<<<<<< HEAD
     title: metaTitle || title || "Terms of Service | Meglertipset.no",
     description: metaDescription || "Meglertipset.no terms of service page",
-    path: "/terms-of-service",
+    path: "/tjenestevilkar",
     keywords: metaKeywords
       ? metaKeywords
-          .split(",")
-          ?.map((k: string) => k.trim())
-          .filter(Boolean)
+        .split(",")
+        ?.map((k: string) => k.trim())
+        .filter(Boolean)
       : [
-          "terms of service",
-          "meglertip",
-          "legal",
-          "user agreement",
-          "terms and conditions",
-        ],
+        "terms of service",
+        "meglertip",
+        "legal",
+        "user agreement",
+        "terms and conditions",
+      ],
     type: "website",
     image: metaImage || null,
     ogTitle: ogTitle || metaTitle || title || "Terms of Service | Meglertipset.no",
@@ -56,20 +55,7 @@ export async function generateMetadata() {
       ogDescription ||
       metaDescription ||
       "Learn the terms of service for Meglertipset.no",
-    canonicalUrl: canonicalUrl || "/terms-of-service",
-=======
-    title: metaTitle || title || "Terms of Service | Meglertip.no",
-    description: metaDescription || "Meglertip.no terms of service page",
-    path: "/terms",
-    keywords: metaKeywords
-      ? metaKeywords.split(',')?.map((k: string) => k.trim()).filter(Boolean)
-      : ["terms of service", "meglertip", "legal", "user agreement", "terms and conditions"],
-    type: "website",
-    image: metaImage || null,
-    ogTitle: ogTitle || metaTitle || title || "Terms of Service | Meglertip.no",
-    ogDescription: ogDescription || metaDescription || "Learn the terms of service for Meglertip.no",
-    canonicalUrl: canonicalUrl || "/terms",
->>>>>>> 1af58a38d1ff9c3c66554ba2e8a964c7534b2296
+    canonicalUrl: canonicalUrl || "/tjenestevilkar",
     robots: robots || "index, follow",
     jsonLd: jsonLd || {},
     publishedDate: publishedDate || "2025-11-28T00:00:00Z",
@@ -78,11 +64,7 @@ export async function generateMetadata() {
 }
 
 const TermsPage = async () => {
-<<<<<<< HEAD
   const termsData = await getPageData();
-=======
-  const termsData = await getPageData()
->>>>>>> 1af58a38d1ff9c3c66554ba2e8a964c7534b2296
   if (!termsData) {
     return <NotFoundPage />;
   }
@@ -97,7 +79,7 @@ const TermsPage = async () => {
               {termsData?.title}
             </h1>
             <p className="text-primary text-base mb-8">
-              Last Update:{" "}
+              Siste oppdatering: {" "}
               {formatDate(termsData.updatedAt || termsData.createdAt)}
             </p>
             <div

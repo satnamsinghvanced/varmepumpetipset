@@ -17,7 +17,7 @@ export default async function ArticleContent({ searchParams, title, categoriesHe
     const category = categorySlug || selectedCategory?.slug
 
     const articleDoc = await getCachedArticlesByCategory({
-        categorySlug: category,
+        categorySlug: '',
         page: page,
         limit: 6
     });
@@ -26,7 +26,7 @@ export default async function ArticleContent({ searchParams, title, categoriesHe
     if (!articles?.data) {
         notFound()
     }
-    
+
     return (
         <Articles
             categoriesHeading={categoriesHeading}

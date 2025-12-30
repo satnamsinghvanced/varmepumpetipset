@@ -79,7 +79,7 @@ const PartnerPage = async () => {
 
   return (
     <>
-      <Breadcrumbs className="mt-8" />
+      <Breadcrumbs className="mt-8" showBackground={true} />
       <PartnerContent partnerData={partnerData} howItWorks={howItWorks} />
     </>
   );

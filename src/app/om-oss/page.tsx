@@ -9,11 +9,7 @@ async function getAboutData() {
   return await JSON.parse(JSON.stringify(doc));
 }
 
-<<<<<<< HEAD
 export const dynamic = "force-static";
-=======
-export const dynamic = 'force-static';
->>>>>>> 1af58a38d1ff9c3c66554ba2e8a964c7534b2296
 
 export async function generateMetadata() {
   const aboutData = await getAboutData();
@@ -44,36 +40,25 @@ export async function generateMetadata() {
     image,
   } = aboutData;
   return generatePageMetadata({
-<<<<<<< HEAD
     title: metaTitle || heading || "About Meglertipset.no",
     description:
       metaDescription || subHeading || "Learn more about Meglertipset.no",
-    path: slug || "/about",
+    path: slug || "/om-oss",
     keywords: metaKeywords
       ? metaKeywords
           .split(",")
           ?.map((k: string) => k.trim())
           .filter(Boolean)
-      : ["about", "meglertip", "real estate"],
+      : ["om-oss", "meglertip", "real estate"],
     type: ogType || "website",
     image: metaImage || ogImage || image || null,
-    ogTitle: ogTitle || metaTitle || heading || "About Meglertipset.no",
+    ogTitle: ogTitle || metaTitle || heading || "Om oss | Meglertipset.no",
     ogDescription:
       ogDescription ||
       metaDescription ||
       subHeading ||
-      "Learn more about Meglertipset.no",
-=======
-    title: metaTitle || heading || "About Meglertip.no",
-    description: metaDescription || subHeading || "Learn more about Meglertip.no",
-    path: slug || "/about",
-    keywords: metaKeywords ? metaKeywords.split(',')?.map((k: string) => k.trim()).filter(Boolean) : ["about", "meglertip", "real estate"],
-    type: ogType || "website",
-    image: metaImage || ogImage || image || null,
-    ogTitle: ogTitle || metaTitle || heading || "About Meglertip.no",
-    ogDescription: ogDescription || metaDescription || subHeading || "Learn more about Meglertip.no",
->>>>>>> 1af58a38d1ff9c3c66554ba2e8a964c7534b2296
-    canonicalUrl: canonicalUrl || "/about",
+      "Lær mer om Meglertipset.no",
+    canonicalUrl: canonicalUrl || "/om-oss",
     robots: robots || "index, follow",
     jsonLd: jsonLd || {},
     publishedDate: publishedDate || "2025-11-28T00:00:00Z",

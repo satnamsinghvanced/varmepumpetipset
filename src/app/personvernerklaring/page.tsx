@@ -4,12 +4,7 @@ import { getCachedPrivacyData } from "@/services/page/privacy-service";
 import { formatDate } from "@/utils/formatDate";
 import { generatePageMetadata } from "@/utils/metadata";
 import NotFoundPage from "../not-found";
-<<<<<<< HEAD
 export const dynamic = "force-static";
-=======
-import HomePage from "../page";
-export const dynamic = 'force-static';
->>>>>>> 1af58a38d1ff9c3c66554ba2e8a964c7534b2296
 
 const getPageData = async () => {
   const data = await getCachedPrivacyData();
@@ -20,27 +15,9 @@ export async function generateMetadata() {
   const privacyPolicyData = await getPageData();
   if (!privacyPolicyData) {
     return generatePageMetadata({
-<<<<<<< HEAD
       title: "Privacy Policy | Meglertipset.no",
       description: "Meglertipset.no privacy policy page",
-      path: "/privacy-policy",
-=======
-        title: metaTitle || title || "Privacy Policy | Meglertip.no",
-        description: metaDescription || "Meglertip.no privacy policy page",
-        path: "/privacy-policy",
-        keywords: metaKeywords
-            ? metaKeywords.split(',')?.map((k: string) => k.trim()).filter(Boolean)
-            : ["privacy policy", "meglertip", "terms and conditions", "data privacy", "user data"],
-        type: "website",
-        image: metaImage || null,
-        ogTitle: ogTitle || metaTitle || title || "Privacy Policy | Meglertip.no",
-        ogDescription: ogDescription || metaDescription || "Learn how Meglertip.no protects your privacy and handles your personal information.",
-        canonicalUrl: canonicalUrl || "/privacy-policy",
-        robots: robots || "index, follow",
-        jsonLd: jsonLd || {},
-        publishedDate: publishedDate || "2025-11-28T00:00:00Z",
-        lastUpdatedDate: lastUpdatedDate || "2025-11-28T00:00:00Z",
->>>>>>> 1af58a38d1ff9c3c66554ba2e8a964c7534b2296
+      path: "/personvernerklaring",
     });
   }
   const {
@@ -61,7 +38,7 @@ export async function generateMetadata() {
   return generatePageMetadata({
     title: metaTitle || title || "Privacy Policy | Meglertipset.no",
     description: metaDescription || "Meglertipset.no privacy policy page",
-    path: "/privacy-policy",
+    path: "/personvernerklaring",
     keywords: metaKeywords
       ? metaKeywords
         .split(",")
@@ -81,7 +58,7 @@ export async function generateMetadata() {
       ogDescription ||
       metaDescription ||
       "Learn how Meglertipset.no protects your privacy and handles your personal information.",
-    canonicalUrl: canonicalUrl || "/privacy-policy",
+    canonicalUrl: canonicalUrl || "/personvernerklaring",
     robots: robots || "index, follow",
     jsonLd: jsonLd || {},
     publishedDate: publishedDate || "2025-11-28T00:00:00Z",
@@ -96,7 +73,6 @@ const PrivacyPolicyPage = async () => {
     return <NotFoundPage />;
   }
 
-<<<<<<< HEAD
   return (
     <>
       <div className="max-w-7xl mx-auto py-10 pt-5 w-full flex gap-8 flex-row max-md:flex-col px-4 md:px-6 lg:px-8">
@@ -107,7 +83,7 @@ const PrivacyPolicyPage = async () => {
               {privacyPolicyData?.title}
             </h1>
             <p className="text-secondary text-base mb-8">
-              Last Update:{" "}
+              Siste oppdatering: {" "}
               {formatDate(
                 privacyPolicyData.updatedAt || privacyPolicyData.createdAt
               )}
@@ -126,32 +102,6 @@ const PrivacyPolicyPage = async () => {
       </div>
     </>
   );
-=======
-    return (
-        <HomePage>
-            <div className="max-w-7xl mx-auto py-10 pt-5 w-full flex gap-8 flex-row max-md:flex-col px-4 md:px-6 lg:px-8">
-                <div className="w-full">
-                    <Breadcrumbs className="!mt-8 !m-0 !p-0" />
-                    <div className="mt-8">
-                        <h1 className="text-4xl md:text-6xl font-bold text-primary mb-4 leading-tight">
-                            {privacyPolicyData?.title}
-                        </h1>
-                        <p className="text-secondary text-base mb-8">
-                            Last Update: {formatDate(privacyPolicyData.updatedAt || privacyPolicyData.createdAt)}
-                        </p>
-                        <div
-                            dangerouslySetInnerHTML={{ __html: privacyPolicyData.description }}
-                            className="article-content prose prose-lg max-w-none text-secondary"
-                        />
-                    </div>
-                </div>
-                <div className="w-full max-w-[346px] h-fit sticky top-24 max-md:w-full max-md:static mt-2">
-                    <GetQuotes />
-                </div>
-            </div>
-        </HomePage>
-    );
->>>>>>> 1af58a38d1ff9c3c66554ba2e8a964c7534b2296
 };
 
 export default PrivacyPolicyPage;

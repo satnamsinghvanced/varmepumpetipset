@@ -3,11 +3,7 @@ import { getCachedFaqPageData } from "@/services/page/faq-page-service";
 import { getCachedFAQs } from "@/services/page/faq-service";
 import { generatePageMetadata } from "@/utils/metadata";
 import FaqContent from "./faqContent";
-<<<<<<< HEAD
 export const dynamic = "force-static";
-=======
-export const dynamic = 'force-static';
->>>>>>> 1af58a38d1ff9c3c66554ba2e8a964c7534b2296
 
 const getFaqPageData = async () => {
   const doc = await getCachedFaqPageData();
@@ -15,37 +11,13 @@ const getFaqPageData = async () => {
 };
 
 export async function generateMetadata() {
-<<<<<<< HEAD
   const faqPage = await getFaqPageData();
   if (!faqPage) {
     return generatePageMetadata({
       title: "FAQ | Meglertipset.no",
       description:
         "Frequently asked questions about real estate agents in Norway",
-      path: "/faq",
-=======
-    const faqPage = await getFaqPageData()
-    const { metaTitle, metaDescription, metaKeywords, metaImage, ogTitle, ogDescription, canonicalUrl, robots, jsonLd, publishedDate, lastUpdatedDate, subHeading, heading, ogImage, ogType, bannerImage } = faqPage
-
-    return generatePageMetadata({
-        title: metaTitle || heading || "faq | Meglertip.no",
-        description: metaDescription || subHeading || "Welcome to Meglertip.no — compare and find the best real estate agents in Norway.",
-        path: "/",
-        keywords: metaKeywords ? metaKeywords.split(",")?.map((k: string) => k.trim()).filter(Boolean) : ["meglertip", "real estate", "agents", "compare"],
-        type: ogType || "website",
-        image: metaImage || ogImage || bannerImage || null,
-        ogTitle: ogTitle || metaTitle || "Home | Meglertip.no",
-        ogDescription: ogDescription || metaDescription || "Compare top real estate agents in Norway easily with Meglertip.no.",
-        canonicalUrl: canonicalUrl,
-        robots: robots || "index, follow",
-        jsonLd: jsonLd || {
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            name: "Meglertip.no"
-        },
-        publishedDate: publishedDate,
-        lastUpdatedDate: lastUpdatedDate,
->>>>>>> 1af58a38d1ff9c3c66554ba2e8a964c7534b2296
+      path: "/ofte-stilte-sporsmal",
     });
   }
   const {
@@ -73,7 +45,7 @@ export async function generateMetadata() {
       metaDescription ||
       subHeading ||
       "Welcome to Meglertipset.no — compare and find the best real estate agents in Norway.",
-    path: "/faq",
+    path: "/ofte-stilte-sporsmal",
     keywords: metaKeywords
       ? metaKeywords
         .split(",")
@@ -87,7 +59,7 @@ export async function generateMetadata() {
       ogDescription ||
       metaDescription ||
       "Compare top real estate agents in Norway easily with Meglertipset.no.",
-    canonicalUrl: canonicalUrl || "/faq",
+    canonicalUrl: canonicalUrl || "/ofte-stilte-sporsmal",
     robots: robots || "index, follow",
     jsonLd: jsonLd || {
       "@context": "https://schema.org",
@@ -100,7 +72,6 @@ export async function generateMetadata() {
 }
 
 const FaqPage = async () => {
-<<<<<<< HEAD
   const doc = await getCachedFAQs();
   const categories = await JSON.parse(JSON.stringify(doc));
   const displayCategories = categories.length > 0 ? categories : {};
@@ -119,22 +90,6 @@ const FaqPage = async () => {
       </div>
     </>
   );
-=======
-    const doc = await getCachedFAQs();
-    const categories = await JSON.parse(JSON.stringify(doc));
-    const displayCategories = categories.length > 0 ? categories : {};
-    const faqPage = await getFaqPageData()
-    const { title, description } = faqPage
-
-    return (
-        <HomePage>
-            <div className='max-w-7xl mx-auto pb-10'>
-                <Breadcrumbs className="mt-8" />
-                <FaqContent displayCategories={displayCategories} title={title} description={description} />
-            </div>
-        </HomePage>
-    );
->>>>>>> 1af58a38d1ff9c3c66554ba2e8a964c7534b2296
 };
 
 export default FaqPage;

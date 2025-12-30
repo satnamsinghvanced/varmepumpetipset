@@ -64,7 +64,7 @@ export async function generateMetadata({
     title: metaTitle || `${category} Artikler | Meglertipset.no`,
     description:
       metaDescription ||
-      `Read expert Artikler about ${category} on Meglertipset.no.`,
+      `Read expert Artikler om ${category} on Meglertipset.no.`,
     path: pathname,
     keywords: metaKeywords
       ? metaKeywords
