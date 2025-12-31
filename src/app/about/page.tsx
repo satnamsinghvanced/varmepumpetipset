@@ -9,11 +9,7 @@ async function getAboutData() {
   return await JSON.parse(JSON.stringify(doc));
 }
 
-<<<<<<< HEAD
 export const dynamic = "force-static";
-=======
-export const dynamic = 'force-static';
->>>>>>> 1af58a38d1ff9c3c66554ba2e8a964c7534b2296
 
 export async function generateMetadata() {
   const aboutData = await getAboutData();
