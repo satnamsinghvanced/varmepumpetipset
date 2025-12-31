@@ -41,8 +41,7 @@ const Articles = ({
               {tabs?.map((tab: any) => (
                 <Link
                   key={tab?.slug}
-                  href={`/artikler/${tab?.slug}`}
-                  // href={`/articles/${tab?.slug}?page=1`}
+                  href={`/artikler/${tab?.slug}`} 
                   className={`border border-dark/50 rounded-lg h-[46px] lg:h-16 px-4 flex items-center text-start justify-start min-w-fit lg:w-full transition-all duration-300 
                     bg-transparent text-dark hover:bg-gray-100`}
                 >

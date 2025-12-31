@@ -960,7 +960,7 @@ async function sendMailToLead(
   );
 
   const mailOptions = {
-    from: `"Meglertipset" <${smtpData.user}>`,
+    from: `"Varmepumpetipset" <${smtpData.user}>`,
     to: userValues.email,
     subject: template.subject,
     html,

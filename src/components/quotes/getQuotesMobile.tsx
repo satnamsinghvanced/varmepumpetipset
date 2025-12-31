@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
+import { useEffect, useRef, useState } from 'react'
 import { FaCheck } from 'react-icons/fa'
 
 const GetQuotesMobile = ({ quotes }: any) => {

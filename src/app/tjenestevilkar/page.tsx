@@ -1,6 +1,7 @@
 import Breadcrumbs from "@/components/global/breadcrumbs";
 import GetQuotes from "@/components/quotes/getQuotes";
 import { getCachedTermsData } from "@/services/page/terms-service";
+import { cleanHtmlContent } from "@/utils/cleanHtml";
 import { formatDate } from "@/utils/formatDate";
 import { generatePageMetadata } from "@/utils/metadata";
 import NotFoundPage from "../not-found";
@@ -13,8 +14,8 @@ export async function generateMetadata() {
   const termsData = await getPageData();
   if (!termsData) {
     return generatePageMetadata({
-      title: "Terms of Service | Meglertipset.no",
-      description: "Meglertipset.no terms of service page",
+      title: "Vilkår for bruk | Varmepumpetipset.no",
+      description: "Varmepumpetipset.no vilkår for bruk page",
       path: "/tjenestevilkar",
     });
   }
@@ -33,28 +34,29 @@ export async function generateMetadata() {
     title,
   } = termsData;
   return generatePageMetadata({
-    title: metaTitle || title || "Terms of Service | Meglertipset.no",
-    description: metaDescription || "Meglertipset.no terms of service page",
+    title: metaTitle || title || "Vilkår for bruk | Varmepumpetipset.no",
+    description: metaDescription || "Varmepumpetipset.no vilkår for bruk page",
     path: "/tjenestevilkar",
     keywords: metaKeywords
       ? metaKeywords
-        .split(",")
-        ?.map((k: string) => k.trim())
-        .filter(Boolean)
+          .split(",")
+          ?.map((k: string) => k.trim())
+          .filter(Boolean)
       : [
-        "terms of service",
-        "meglertip",
-        "legal",
-        "user agreement",
-        "terms and conditions",
-      ],
+          "vilkår for bruk",
+          "meglertip",
+          "legal",
+          "user agreement",
+          "vilkår for bruk",
+        ],
     type: "website",
     image: metaImage || null,
-    ogTitle: ogTitle || metaTitle || title || "Terms of Service | Meglertipset.no",
+    ogTitle:
+      ogTitle || metaTitle || title || "Vilkår for bruk | Varmepumpetipset.no",
     ogDescription:
       ogDescription ||
       metaDescription ||
-      "Learn the terms of service for Meglertipset.no",
+      "Vilkår for bruk for Varmepumpetipset.no",
     canonicalUrl: canonicalUrl || "/tjenestevilkar",
     robots: robots || "index, follow",
     jsonLd: jsonLd || {},
@@ -79,11 +81,13 @@ const TermsPage = async () => {
               {termsData?.title}
             </h1>
             <p className="text-primary text-base mb-8">
-              Siste oppdatering: {" "}
+              Siste oppdatering:{" "}
               {formatDate(termsData.updatedAt || termsData.createdAt)}
             </p>
             <div
-              dangerouslySetInnerHTML={{ __html: termsData.description }}
+              dangerouslySetInnerHTML={{
+                __html: cleanHtmlContent(termsData.description),
+              }}
               className="article-content prose prose-lg max-w-none text-secondary"
             />
           </div>

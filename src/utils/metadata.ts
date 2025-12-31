@@ -48,7 +48,7 @@ export async function generatePageMetadata({
   lastUpdatedDate?: string;
 }): Promise<Metadata> {
   const siteUrl = (
-    process.env.NEXT_PUBLIC_BASE_URL || "https://meglertipset.no"
+    process.env.NEXT_PUBLIC_BASE_URL || "https://Varmepumpetipset.no"
   ).replace(/\/$/, "");
 
   // Consistently use the siteUrl for canonicals.
@@ -83,12 +83,12 @@ export async function generatePageMetadata({
     : `${cleanBase}/images/og-default.jpg`;
 
   const pageTitle = title
-    ? title === "Meglertipset.no"
-      ? `Meglertipset.no`
-      : `${title} | Meglertipset.no`
-    : "Meglertipset.no";
+    ? title === "Varmepumpetipset.no"
+      ? `Varmepumpetipset.no`
+      : `${title} | Varmepumpetipset.no`
+    : "Varmepumpetipset.no";
 
-  const ogFinalTitle = ogTitle ? `${ogTitle} | Meglertipset.no` : pageTitle;
+  const ogFinalTitle = ogTitle ? `${ogTitle} | Varmepumpetipset.no` : pageTitle;
   const ogFinalDescription = ogDescription || description;
 
   const openGraphImages = [
@@ -156,7 +156,7 @@ export async function generatePageMetadata({
       title: ogFinalTitle,
       description: ogFinalDescription,
       url: finalCanonical,
-      siteName: "Meglertipset.no",
+      siteName: "Varmepumpetipset.no",
       type,
       images: openGraphImages,
       ...dates,

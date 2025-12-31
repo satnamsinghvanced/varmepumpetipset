@@ -4,9 +4,10 @@ import Breadcrumbs from "@/components/global/breadcrumbs";
 import GetQuotes from "@/components/quotes/getQuotes";
 import { ArticleProps } from "@/const/types";
 import { getCachedArticleBySlug } from "@/services/page/getCachedArticleBySlug-service";
+import { cleanHtmlContent } from "@/utils/cleanHtml";
 import { formatDate } from "@/utils/formatDate";
 import Image from "next/image";
-import { notFound } from 'next/navigation';
+import { notFound } from "next/navigation";
 
 const ArticleSlug = async ({ slugValue }: ArticleProps) => {
   const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_URL ?? "";
@@ -14,7 +15,7 @@ const ArticleSlug = async ({ slugValue }: ArticleProps) => {
   const article = await JSON.parse(JSON.stringify(articleDoc));
 
   if (!article) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -57,7 +58,9 @@ const ArticleSlug = async ({ slugValue }: ArticleProps) => {
             )}
           </div>
           <div
-            dangerouslySetInnerHTML={{ __html: article?.description || "" }}
+            dangerouslySetInnerHTML={{
+              __html: cleanHtmlContent(article?.description || ""),
+            }}
             className="article-content"
           ></div>
         </div>
@@ -65,12 +68,11 @@ const ArticleSlug = async ({ slugValue }: ArticleProps) => {
           <GetQuotes />
         </div>
       </div>
-      {article?.articleTags &&
-        article?.articleTags ?
-          <ArticlesByTags tags={article?.articleTags} slug={article?.slug} />
-          :
-          <ArticleSecond />
-      }
+      {article?.articleTags && article?.articleTags ? (
+        <ArticlesByTags tags={article?.articleTags} slug={article?.slug} />
+      ) : (
+        <ArticleSecond />
+      )}
     </>
   );
 };

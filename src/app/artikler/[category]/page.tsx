@@ -31,8 +31,8 @@ export async function generateMetadata({
 
   if (!articlesData?.data) {
     return generatePageMetadata({
-      title: `${category} Artikler | Meglertipset.no`,
-      description: `Read expert articles about ${category} on Meglertipset.no.`,
+      title: `${category} Artikler | Varmepumpetipset.no`,
+      description: `Read expert articles about ${category} on Varmepumpetipset.no.`,
       path: `/artikler/${category}`,
     });
   }
@@ -61,10 +61,10 @@ export async function generateMetadata({
       : pathname;
 
   return generatePageMetadata({
-    title: metaTitle || `${category} Artikler | Meglertipset.no`,
+    title: metaTitle || `${category} Artikler | Varmepumpetipset.no`,
     description:
       metaDescription ||
-      `Read expert Artikler om ${category} on Meglertipset.no.`,
+      `Read expert Artikler om ${category} on Varmepumpetipset.no.`,
     path: pathname,
     keywords: metaKeywords
       ? metaKeywords
@@ -74,11 +74,11 @@ export async function generateMetadata({
       : ["meglertip", category, "real estate", "artikler"],
     type: ogType || "website",
     image: ogImage || null,
-    ogTitle: ogTitle || metaTitle || `${category} Artikler | Meglertipset.no`,
+    ogTitle: ogTitle || metaTitle || `${category} Artikler | Varmepumpetipset.no`,
     ogDescription:
       ogDescription ||
       metaDescription ||
-      `Explore helpful ${category} artikler from Meglertipset.no.`,
+      `Explore helpful ${category} artikler from Varmepumpetipset.no.`,
     canonicalUrl: finalCanonical,
     robots: robots || "index, follow",
     jsonLd: jsonLd || {

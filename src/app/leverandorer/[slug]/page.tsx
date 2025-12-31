@@ -27,9 +27,9 @@ export async function generateMetadata({
 
   if (!placeData?.data) {
     return generatePageMetadata({
-      title: "Eiendomsmegler | Meglertipset.no",
+      title: "Eiendomsmegler | Varmepumpetipset.no",
       description: "Finn eiendomsmeglere i ditt område",
-      path: `/eiendomsmegler/${slugValue}`,
+      path: `/leverandorer/${slugValue}`,
     });
   }
   const {
@@ -60,7 +60,7 @@ export async function generateMetadata({
 
   //   alternates: {
   //     canonical:
-  //       canonicalUrl || `https://meglertipset.no/eiendomsmegler/${slugValue}`,
+  //       canonicalUrl || `https://Varmepumpetipset.no/eiendomsmegler/${slugValue}`,
   //   },
 
   //   robots: robots || "index, follow",
@@ -95,12 +95,12 @@ export async function generateMetadata({
   // };
 
   return generatePageMetadata({
-    title: metaTitle || slug || heading || `${title} | Meglertipset.no`,
+    title: metaTitle || slug || heading || `${title} | Varmepumpetipset.no`,
     description:
       metaDescription ||
       subHeading ||
-      "Welcome to Meglertipset.no — compare and find the best real estate agents in Norway.",
-    path: `/eiendomsmegler/${slugValue}`,
+      "Welcome to Varmepumpetipset.no — compare and find the best real estate agents in Norway.",
+    path: `/leverandorer/${slugValue}`,
     keywords: metaKeywords
       ? metaKeywords
         .split(",")
@@ -109,21 +109,21 @@ export async function generateMetadata({
       : ["meglertip", "real estate", "agents", "compare"],
     type: ogType || "website",
     image: metaImage || ogImage || bannerImage || null,
-    ogTitle: ogTitle || metaTitle || `${title} | Meglertipset.no`,
+    ogTitle: ogTitle || metaTitle || `${title} | Varmepumpetipset.no`,
     ogDescription:
       ogDescription ||
       metaDescription ||
-      "Compare top real estate agents in Norway easily with Meglertipset.no.",
+      "Compare top real estate agents in Norway easily with Varmepumpetipset.no.",
     canonicalUrl: canonicalUrl
       ? canonicalUrl.startsWith("/") || canonicalUrl.startsWith("http")
         ? canonicalUrl
-        : `/eiendomsmegler/${canonicalUrl}`
-      : `/eiendomsmegler/${slugValue}`,
+        : `/leverandorer/${canonicalUrl}`
+      : `/leverandorer/${slugValue}`,
     robots: robots || "index, follow",
     jsonLd: jsonLd || {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      name: "Meglertipset.no",
+      name: "Varmepumpetipset.no",
     },
     publishedDate: publishedDate,
     lastUpdatedDate: lastUpdatedDate,

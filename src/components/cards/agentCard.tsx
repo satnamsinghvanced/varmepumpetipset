@@ -1,8 +1,8 @@
+import { formatData } from "@/utils/formatData";
 import Image from "next/image";
 import Link from "next/link";
 import FeatureChip from "../chips/featureChip";
 import Star from "../star";
-import { formatData } from "@/utils/formatData";
 
 interface AgentCardProps {
   companyName?: string;

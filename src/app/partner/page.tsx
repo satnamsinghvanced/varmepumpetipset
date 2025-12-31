@@ -15,7 +15,7 @@ export async function generateMetadata() {
   const partnerData = await getPartnerData();
   if (!partnerData) {
     return generatePageMetadata({
-      title: "Partner | Meglertipset.no",
+      title: "Partner | Varmepumpetipset.no",
       description: "Join the Meglertip network and collaborate with us",
       path: "/partner",
     });

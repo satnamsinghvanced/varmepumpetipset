@@ -1,7 +1,7 @@
 import { Articles } from '@/const/types'
+import { formatDate } from '@/utils/formatDate'
 import RedirectButton from '../global/redirectButton'
 import LatestInsightsCard from './latestInsightsCard'
-import { formatDate } from '@/utils/formatDate'
 
 // const formatDate = (date?: string | Date | null) => {
 //     if (!date) return '';

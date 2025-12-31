@@ -4,16 +4,22 @@ import { getCachedArticlesPageData } from "@/services/page/article-page-service"
 import { generatePageMetadata } from "@/utils/metadata";
 import ArticleContent from "./articleContent";
 
+
 const getArticlePageData = async () => {
   const doc = await getCachedArticlesPageData();
   return await JSON.parse(JSON.stringify(doc));
 };
-
-export async function generateMetadata() {
+interface PageProps {
+  searchParams: {
+    page?: string;
+  };
+}
+export async function generateMetadata({ searchParams }: PageProps) {
+  const page = await searchParams;
   const articlesPage = await getArticlePageData();
   if (!articlesPage) {
     return generatePageMetadata({
-      title: "Artikler | Meglertipset.no",
+      title: "Artikler | Varmepumpetipset.no",
       description: "Read expert Artikler about real estate in Norway",
       path: "/artikler",
     });
@@ -37,11 +43,11 @@ export async function generateMetadata() {
     bannerImage,
   } = articlesPage;
   return generatePageMetadata({
-    title: metaTitle || heading || "Artikler | Meglertipset.no",
+    title: metaTitle || heading || "Artikler | Varmepumpetipset.no",
     description:
       metaDescription ||
       subHeading ||
-      "Welcome to Meglertipset.no — compare and find the best real estate agents in Norway.",
+      "Welcome to Varmepumpetipset.no — compare and find the best real estate agents in Norway.",
     path: "/artikler",
     keywords: metaKeywords
       ? metaKeywords
@@ -51,17 +57,17 @@ export async function generateMetadata() {
       : ["meglertip", "real estate", "agents", "compare"],
     type: ogType || "website",
     image: metaImage || ogImage || bannerImage || null,
-    ogTitle: ogTitle || metaTitle || "Home | Meglertipset.no",
+    ogTitle: ogTitle || metaTitle || "Home | Varmepumpetipset.no",
     ogDescription:
       ogDescription ||
       metaDescription ||
-      "Compare top real estate agents in Norway easily with Meglertipset.no.",
-    canonicalUrl: canonicalUrl || "/artikler",
+      "Compare top real estate agents in Norway easily with Varmepumpetipset.no.",
+    canonicalUrl: `${page.page ? `${canonicalUrl}?page=${page.page}` : canonicalUrl}` || "/artikler",
     robots: robots || "index, follow",
     jsonLd: jsonLd || {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      name: "Meglertipset.no",
+      name: "Varmepumpetipset.no",
     },
     publishedDate: publishedDate,
     lastUpdatedDate: lastUpdatedDate,

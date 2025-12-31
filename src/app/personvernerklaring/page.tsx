@@ -1,6 +1,7 @@
 import Breadcrumbs from "@/components/global/breadcrumbs";
 import GetQuotes from "@/components/quotes/getQuotes";
 import { getCachedPrivacyData } from "@/services/page/privacy-service";
+import { cleanHtmlContent } from "@/utils/cleanHtml";
 import { formatDate } from "@/utils/formatDate";
 import { generatePageMetadata } from "@/utils/metadata";
 import NotFoundPage from "../not-found";
@@ -15,8 +16,8 @@ export async function generateMetadata() {
   const privacyPolicyData = await getPageData();
   if (!privacyPolicyData) {
     return generatePageMetadata({
-      title: "Privacy Policy | Meglertipset.no",
-      description: "Meglertipset.no privacy policy page",
+      title: "Privacy Policy | Varmepumpetipset.no",
+      description: "Varmepumpetipset.no privacy policy page",
       path: "/personvernerklaring",
     });
   }
@@ -36,28 +37,29 @@ export async function generateMetadata() {
   } = privacyPolicyData;
 
   return generatePageMetadata({
-    title: metaTitle || title || "Privacy Policy | Meglertipset.no",
-    description: metaDescription || "Meglertipset.no privacy policy page",
+    title: metaTitle || title || "Personvernerklaring | Varmepumpetipset.no",
+    description: metaDescription || "Varmepumpetipset.no personvernerklaring page",
     path: "/personvernerklaring",
     keywords: metaKeywords
       ? metaKeywords
-        .split(",")
-        ?.map((k: string) => k.trim())
-        .filter(Boolean)
+          .split(",")
+          ?.map((k: string) => k.trim())
+          .filter(Boolean)
       : [
-        "privacy policy",
-        "meglertip",
-        "terms and conditions",
-        "data privacy",
-        "user data",
-      ],
+          "personvernerklaring",
+          "meglertip",
+          "terms and conditions",
+          "data privacy",
+          "user data",
+        ],
     type: "website",
     image: metaImage || null,
-    ogTitle: ogTitle || metaTitle || title || "Privacy Policy | Meglertipset.no",
+    ogTitle:
+      ogTitle || metaTitle || title || "Personvernerklaring | Varmepumpetipset.no",
     ogDescription:
       ogDescription ||
       metaDescription ||
-      "Learn how Meglertipset.no protects your privacy and handles your personal information.",
+      "Personvernerklaring for Varmepumpetipset.no",
     canonicalUrl: canonicalUrl || "/personvernerklaring",
     robots: robots || "index, follow",
     jsonLd: jsonLd || {},
@@ -83,14 +85,14 @@ const PrivacyPolicyPage = async () => {
               {privacyPolicyData?.title}
             </h1>
             <p className="text-secondary text-base mb-8">
-              Siste oppdatering: {" "}
+              Siste oppdatering:{" "}
               {formatDate(
                 privacyPolicyData.updatedAt || privacyPolicyData.createdAt
               )}
             </p>
             <div
               dangerouslySetInnerHTML={{
-                __html: privacyPolicyData.description,
+                __html: cleanHtmlContent(privacyPolicyData.description),
               }}
               className="article-content prose prose-lg max-w-none text-secondary"
             />

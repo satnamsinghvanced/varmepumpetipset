@@ -2,8 +2,8 @@ import { SlugPageProps } from "@/const/types";
 import { getCachedArticleBySlug } from "@/services/page/getCachedArticleBySlug-service";
 import { capitalizeTitle } from "@/utils/capitalizeTitle";
 import { generatePageMetadata } from "@/utils/metadata";
-import ArticleSlug from "./articleSlug";
 import { notFound } from "next/navigation";
+import ArticleSlug from "./articleSlug";
 
 export async function generateMetadata({ params }: SlugPageProps) {
   const param = await params;
@@ -13,8 +13,8 @@ export async function generateMetadata({ params }: SlugPageProps) {
   const articleDoc = await getCachedArticleBySlug(slug ?? "");
   if (!articleDoc) {
     return generatePageMetadata({
-      title: `${title} | Meglertipset.no`,
-      description: `Read expert artikler about ${title} on Meglertipset.no.`,
+      title: `${title} | Varmepumpetipset.no`,
+      description: `Read expert artikler about ${title} on Varmepumpetipset.no.`,
       path: `/artikler/${articleCategory}/${slug}`,
     });
   }
@@ -35,9 +35,9 @@ export async function generateMetadata({ params }: SlugPageProps) {
   } = article ?? {};
 
   return generatePageMetadata({
-    title: metaTitle || `${title} | Meglertipset.no`,
+    title: metaTitle || `${title} | Varmepumpetipset.no`,
     description:
-      metaDescription || `Read expert artikler about ${title} on Meglertipset.no.`,
+      metaDescription || `Read expert artikler about ${title} on Varmepumpetipset.no.`,
     path: `/artikler/${articleCategory}/${slug}`,
     keywords: metaKeywords
       ? metaKeywords
@@ -47,11 +47,11 @@ export async function generateMetadata({ params }: SlugPageProps) {
       : ["meglertip", "real estate", "artikler"],
     type: ogType || "website",
     image: ogImage || null,
-    ogTitle: ogTitle || metaTitle || `${title} | Meglertipset.no`,
+    ogTitle: ogTitle || metaTitle || `${title} | Varmepumpetipset.no`,
     ogDescription:
       ogDescription ||
       metaDescription ||
-      `Explore helpful ${title} artikler from Meglertipset.no.`,
+      `Explore helpful ${title} artikler from Varmepumpetipset.no.`,
     canonicalUrl: canonicalUrl
       ? canonicalUrl.startsWith("/") || canonicalUrl.startsWith("http")
         ? canonicalUrl

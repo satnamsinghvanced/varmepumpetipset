@@ -14,8 +14,8 @@ export async function generateMetadata() {
   const sitemapData = await getSiteMapData();
   if (!sitemapData) {
     return generatePageMetadata({
-      title: "Sitemap | Meglertipset.no",
-      description: "Overview of all pages on Meglertipset.no",
+      title: "Sitemap | Varmepumpetipset.no",
+      description: "Overview of all pages on Varmepumpetipset.no",
       path: "/sitemap",
     });
   }
@@ -35,8 +35,8 @@ export async function generateMetadata() {
   } = sitemapData;
 
   return generatePageMetadata({
-    title: metaTitle || "Sitemap | Meglertipset.no",
-    description: metaDescription || "Overview of all pages on Meglertipset.no",
+    title: metaTitle || "Sitemap | Varmepumpetipset.no",
+    description: metaDescription || "Overview of all pages on Varmepumpetipset.no",
     path: "/sitemap",
     keywords: metaKeywords
       ? metaKeywords
@@ -46,11 +46,11 @@ export async function generateMetadata() {
       : ["sitemap", "meglertip", "website overview", "site structure", "pages"],
     type: "website",
     image: metaImage || null,
-    ogTitle: ogTitle || metaTitle || "Sitemap | Meglertipset.no",
+    ogTitle: ogTitle || metaTitle || "Sitemap | Varmepumpetipset.no",
     ogDescription:
       ogDescription ||
       metaDescription ||
-      "Explore all the pages on Meglertipset.no",
+      "Explore all the pages on Varmepumpetipset.no",
     canonicalUrl: canonicalUrl || "/sitemap",
     robots: robots || "index, follow",
     jsonLd: jsonLd || {},

@@ -1,7 +1,7 @@
 import { ArticleContentProps } from "@/const/types";
 import { getCachedArticleCategories, getCachedArticlesByCategory } from "@/services/page/article-service";
-import Articles from "./articles";
 import { notFound } from "next/navigation";
+import Articles from "./articles";
 
 export default async function ArticleContent({ searchParams, title, categoriesHeading }: ArticleContentProps) {
     const params = await searchParams;

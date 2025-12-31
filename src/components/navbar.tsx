@@ -1,9 +1,9 @@
+import { NAV_LINKS } from "@/const/consts";
+import { NavbarProps } from "@/const/types";
+import Image from "next/image";
 import Link from "next/link";
 import Hamburger from "./hamburger";
 import Logo from "./logos/logo";
-import { NavbarProps } from "@/const/types";
-import Image from "next/image";
-import { NAV_LINKS } from "@/const/consts";
 
 const imageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_URL ?? "";
 

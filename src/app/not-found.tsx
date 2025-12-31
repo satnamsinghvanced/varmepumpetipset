@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { NotFoundPageProps } from "@/const/types";
+import Link from "next/link";
 
 const NotFoundPage = ({ hideNavFooter = false }: NotFoundPageProps) => {
   return (

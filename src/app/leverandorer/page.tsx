@@ -15,9 +15,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const realestateAgents = await getRealestateAgentsData();
   if (!realestateAgents) {
     return generatePageMetadata({
-      title: "Real Estate Agents | Meglertipset.no",
+      title: "Real Estate Agents | Varmepumpetipset.no",
       description: "Compare and find the best real estate agents in Norway",
-      path: "/eiendomsmegler",
+      path: "/leverandorer",
     });
   }
   const {
@@ -39,12 +39,12 @@ export async function generateMetadata(): Promise<Metadata> {
     bannerImage,
   } = realestateAgents;
   return generatePageMetadata({
-    title: metaTitle || heading || "Real Estate Agents | Meglertipset.no",
+    title: metaTitle || heading || "Real Estate Agents | Varmepumpetipset.no",
     description:
       metaDescription ||
       subHeading ||
-      "Welcome to Meglertipset.no — compare and find the best real estate agents in Norway.",
-    path: "/eiendomsmegler",
+      "Welcome to Varmepumpetipset.no — compare and find the best real estate agents in Norway.",
+    path: "/leverandorer",
     keywords: metaKeywords
       ? metaKeywords
           .split(",")
@@ -53,17 +53,17 @@ export async function generateMetadata(): Promise<Metadata> {
       : ["meglertip", "real estate", "agents", "compare"],
     type: ogType || "website",
     image: metaImage || ogImage || bannerImage || null,
-    ogTitle: ogTitle || metaTitle || "Real Estate Agents | Meglertipset.no",
+    ogTitle: ogTitle || metaTitle || "Real Estate Agents | Varmepumpetipset.no",
     ogDescription:
       ogDescription ||
       metaDescription ||
-      "Compare top real estate agents in Norway easily with Meglertipset.no.",
-    canonicalUrl: canonicalUrl || "/eiendomsmegler",
+      "Compare top real estate agents in Norway easily with Varmepumpetipset.no.",
+    canonicalUrl: canonicalUrl || "/leverandorer",
     robots: robots || "index, follow",
     jsonLd: jsonLd || {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      name: "Meglertipset.no",
+      name: "Varmepumpetipset.no",
     },
     publishedDate: publishedDate,
     lastUpdatedDate: lastUpdatedDate,
