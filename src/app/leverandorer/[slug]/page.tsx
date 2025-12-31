@@ -27,8 +27,8 @@ export async function generateMetadata({
 
   if (!placeData?.data) {
     return generatePageMetadata({
-      title: "Eiendomsmegler | Varmepumpetipset.no",
-      description: "Finn eiendomsmeglere i ditt område",
+      title: "Leverandorer | Varmepumpetipset.no",
+      description: "Finn Leverandorer i ditt område",
       path: `/leverandorer/${slugValue}`,
     });
   }
