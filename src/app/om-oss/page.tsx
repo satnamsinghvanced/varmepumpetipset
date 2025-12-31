@@ -15,9 +15,9 @@ export async function generateMetadata() {
   const aboutData = await getAboutData();
   if (!aboutData) {
     return generatePageMetadata({
-      title: "About | Varmepumpetipset.no",
+      title: "Om oss | Varmepumpetipset.no",
       description: "Learn more about Varmepumpetipset.no",
-      path: "/about",
+      path: "/om-oss",
     });
   }
   const {
