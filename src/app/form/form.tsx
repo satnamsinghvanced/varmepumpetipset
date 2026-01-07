@@ -1169,7 +1169,7 @@ const Form = ({
       <div className="rounded-xl shadow-md px-4 py-6 sm:p-8 bg-background max-w-xl mx-auto ">
         <h3 className="text-2xl font-semibold mb-6">
           {currentStepData?.stepTitle ||
-            `Step ${currentStep + 1} of ${visibleSteps.length}`}
+            `Steg ${currentStep + 1} of ${visibleSteps.length}`}
         </h3>
 
         <form className="flex flex-col gap-5 text-[16px] font-semibold min-h-[300px] justify-between">
@@ -1309,9 +1309,10 @@ const Form = ({
       {/* Right Section - Changes based on state */}
       <div className="w-full bg-accent lg:py-16 py-10 px-4 md:px-6 lg:px-8">
         {/* Mobile progress steps - only show if we have steps */}
-        {visibleSteps.length > 0 && (
+        
+        {steps.length > 0 && (
           <div className="hidden gap-2 justify-center md:justify-start mb-12 max-lg:flex max-w-xl mx-auto">
-            {visibleSteps?.map((_, i: number) => (
+            {steps?.map((_, i: number) => (
               <div
                 key={i}
                 className={`h-2 flex-1 rounded-full ${
@@ -1352,8 +1353,8 @@ const Form = ({
           renderFormContent()
         ) : (
           // Initial state: Show form selection while first form loads in background
-          <div className="rounded-xl shadow-md p-8 bg-background max-w-xl mx-auto">
-            <h3 className="text-2xl font-semibold mb-6">Step 1</h3>
+          <div className="rounded-xl shadow-md p-4 pt-6 md:p-8  bg-background max-w-xl mx-auto">
+            <h3 className="text-2xl font-semibold mb-6">Steg 1</h3>
 
             <div className="flex flex-col gap-[55px] text-[16px] font-semibold min-h-[300px]">
               {formSelect.length > 1 && (
@@ -1364,6 +1365,7 @@ const Form = ({
                   isMultiSelectMode={isMultiSelectMode}
                 />
               )}
+                 {/* <div className="min-h-[84px] h-[84px]"></div> */}
             </div>
 
             <div className="flex justify-between mt-8 gap-4">
