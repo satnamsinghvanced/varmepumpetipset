@@ -10,7 +10,7 @@ import {
   Input,
   Select,
   SelectItem,
-  Textarea
+  Textarea,
 } from "@heroui/react";
 import { useCallback, useEffect, useState } from "react";
 import { FaRegCircleCheck, FaRegCircleXmark } from "react-icons/fa6";
@@ -182,10 +182,11 @@ const FormSelectionField = ({
             <button
               key={form._id}
               type="button"
-              className={`p-4 sm:p-6 rounded-lg transition-all duration-300 text-sm font-medium shadow-sm w-full flex gap-2 flex-col justify-start items-start min-h-[138px] ${isSelected
-                ? "bg-primary/20 text-primary"
-                : "bg-white text-primary"
-                } ${isInvalid && touched ? "border-danger" : ""}`}
+              className={`p-4 sm:p-6 rounded-lg transition-all duration-300 text-sm font-medium shadow-sm w-full flex gap-2 flex-col justify-start items-start min-h-[138px] ${
+                isSelected
+                  ? "bg-primary/20 text-primary"
+                  : "bg-white text-primary"
+              } ${isInvalid && touched ? "border-danger" : ""}`}
               onClick={() => onSelect(form._id)}
             >
               <div className="font-semibold text-2xl w-full text-start">
@@ -311,11 +312,11 @@ const Form = ({
         prev?.map((form, i) =>
           i === index
             ? {
-              ...form,
-              formData: data,
-              loading: false,
-              step: 0, // Reset to step 0 when form loads
-            }
+                ...form,
+                formData: data,
+                loading: false,
+                step: 0, // Reset to step 0 when form loads
+              }
             : form
         )
       );
@@ -327,11 +328,11 @@ const Form = ({
         prev?.map((form, i) =>
           i === index
             ? {
-              ...form,
-              error:
-                error.message || "Failed to load form. Please try again.",
-              loading: false,
-            }
+                ...form,
+                error:
+                  error.message || "Failed to load form. Please try again.",
+                loading: false,
+              }
             : form
         )
       );
@@ -411,7 +412,10 @@ const Form = ({
   const validateField = useCallback(
     (name: string, value: any, field: FormField, formIndex: number): string => {
       if (field.required) {
-        if (field.name === "phone" && value?.replace(/^\+47/, "")?.length !== 8) {
+        if (
+          field.name === "phone" &&
+          value?.replace(/^\+47/, "")?.length !== 8
+        ) {
           return `${field.label} skal være 8 sifre`;
         } else if (field.name === "postalCode" && value?.length !== 4) {
           return `${field.label} skal være 4 sifre`;
@@ -491,8 +495,8 @@ const Form = ({
           const newErrors = error
             ? { ...form.errors, [name]: error }
             : Object.fromEntries(
-              Object.entries(form.errors).filter(([key]) => key !== name)
-            );
+                Object.entries(form.errors).filter(([key]) => key !== name)
+              );
 
           return { ...form, values: newValues, errors: newErrors };
         })
@@ -591,13 +595,13 @@ const Form = ({
             prev?.map((form, i) =>
               i === currentFormIndex
                 ? {
-                  ...form,
-                  touched: {
-                    ...form.touched,
-                    [streetField.name]: true,
-                    [postalField.name]: true,
-                  },
-                }
+                    ...form,
+                    touched: {
+                      ...form.touched,
+                      [streetField.name]: true,
+                      [postalField.name]: true,
+                    },
+                  }
                 : form
             )
           );
@@ -725,7 +729,7 @@ const Form = ({
     const fieldProps = {
       key: `${field._id}-${formIndex}-${index}`,
       type: field.type,
-      label: `${field.label}${field.required ? " *" : ""}`,
+      label: `${field.label}`,
       placeholder: field.placeholder || " ",
       required: field.required,
       labelPlacement: "outside" as const,
@@ -793,14 +797,15 @@ const Form = ({
         !!currentFormData?.errors.postalCode;
 
       return (
-        <label key={key} className="font-medium text-small !mt-[-20px]">
-          {field.label} <span className="text-[#ff0000]">{field.required ? " *" : ""}</span>
-          <div className="flex gap-3 h-16">
+        <label key={key} className="font-medium text-small ">
+          {field.label}{" "}
+          <span className="text-[#ff0000]">{field.required ? " *" : ""}</span>
+          <div className="flex gap-3 h-16 mt-2">
             <Input
               type="text"
               placeholder="Adresseplassen 13"
               labelPlacement="outside"
-              required={field.required}
+              isRequired={field.required}
               value={currentFormData?.values.streetName || ""}
               errorMessage={
                 isStreetInvalid ? currentFormData?.errors.streetName : undefined
@@ -858,12 +863,17 @@ const Form = ({
               }
             /> */}
             <Input
-              type="number"
+              type="text"
+              inputMode="numeric"
               placeholder="0567"
               labelPlacement="outside"
               maxLength={4}
-              classNames={{innerWrapper:" !m-0 ", inputWrapper:"p-0",input:"p-4"}}
-              required={field.required}
+              classNames={{
+                innerWrapper: " !m-0 ",
+                inputWrapper: "p-0",
+                input: "p-4",
+              }}
+              isRequired={field.required}
               value={currentFormData?.values.postalCode || ""}
               errorMessage={
                 isPostalInvalid ? currentFormData?.errors.postalCode : undefined
@@ -882,7 +892,7 @@ const Form = ({
                 )
               }
               onChange={(e) => {
-                const value = e.target.value.slice(0, 4);
+                const value = e.target.value.replace(/\D/g, "").slice(0, 4);
                 handleChange(formIndex, "postalCode", value, {
                   ...addressFieldBase,
                   name: "postalCode",
@@ -902,6 +912,7 @@ const Form = ({
           <Input
             key={key}
             {...restOfProps}
+            isRequired={field.required}
             onChange={(e: any) =>
               handleChange(formIndex, field.name, e.target.value, field)
             }
@@ -929,7 +940,7 @@ const Form = ({
             key={key}
             label={fieldProps.label}
             placeholder={"Enter 8 digits (e.g., 12345678)"}
-            required={fieldProps.required}
+            isRequired={fieldProps.required}
             labelPlacement={fieldProps.labelPlacement}
             value={countryCode + (rawValue.length > 0 ? " " : "") + rawValue}
             maxLength={countryCode.length + 1 + inputLengthLimit}
@@ -961,6 +972,7 @@ const Form = ({
             {...restOfProps}
             type="text"
             className="h-auto"
+            isRequired={fieldProps.required}
             classNames={{
               inputWrapper: "min-h-auto h-auto",
               input: "min-h-64",
@@ -998,24 +1010,26 @@ const Form = ({
             ? field.options
             : [];
         const currentValue = value;
-        const effectiveValue = currentValue || availableOptions[0] || "";
-        const selectedKeys = effectiveValue ? [effectiveValue] : undefined;
+        const effectiveValue = currentValue || "";
+        const selectedKeys = effectiveValue
+          ? new Set([effectiveValue])
+          : new Set();
 
         return (
           <div key={field._id || index}>
             <Select
               label={fieldProps.label}
               placeholder={fieldProps.placeholder}
-              required={fieldProps.required}
+              isRequired={fieldProps.required}
               labelPlacement={fieldProps.labelPlacement}
               selectedKeys={selectedKeys}
+              disallowEmptySelection={false}
               errorMessage={fieldProps.errorMessage}
               isInvalid={fieldProps.isInvalid}
               onBlur={fieldProps.onBlur}
               popoverProps={{
                 placement: "bottom",
                 shouldFlip: false,
-
               }}
               onSelectionChange={(keys) => {
                 const selectedValue = Array.from(keys).join(",");
@@ -1024,7 +1038,7 @@ const Form = ({
               }}
             >
               {availableOptions?.map((opt: string, optIndex: number) => (
-                <SelectItem key={opt || `opt-${optIndex}`} textValue={opt} >
+                <SelectItem key={opt || `opt-${optIndex}`} textValue={opt}>
                   {/* // <SelectItem key={opt || `opt-${optIndex}`} textValue={`${opt} ${optIndex}`}> */}
 
                   {opt}
@@ -1036,11 +1050,8 @@ const Form = ({
 
       case "checkbox":
         const isCheckboxChecked = (fieldName: string, optionValue?: string) => {
-          if (optionValue) {
-            return (value || []).includes(optionValue);
-          } else {
-            return !!value;
-          }
+          if (Array.isArray(value)) return value.includes(optionValue || "");
+          return value === optionValue || !!value;
         };
 
         return (
@@ -1053,39 +1064,57 @@ const Form = ({
                   </p>
                 )}
                 <div className="flex flex-col gap-2">
-                  {field.options?.map((opt: string, optIndex: number) => (
-                    <Checkbox
-                      key={`${field._id}-${optIndex}`}
-                      isSelected={isCheckboxChecked(field.name, opt)}
-                      onValueChange={(checked) => {
-                        const currentValues = value || [];
-                        let newValue;
-                        if (checked) {
-                          newValue = [...currentValues, opt];
-                        } else {
-                          newValue = currentValues.filter(
-                            (v: string) => v !== opt
-                          );
-                        }
-                        handleChange(formIndex, field.name, newValue, field);
-                        handleBlur(formIndex, field.name, newValue, field);
-                      }}
-                    >
-                      <span className="text-sm font-normal">{opt}</span>
-                    </Checkbox>
-                  ))}
+                  {field.options?.map((opt: string, optIndex: number) => {
+                    const isMulti = field.name === "multi";
+
+                    const isSelected = isMulti
+                      ? Array.isArray(value)
+                        ? value.includes(opt)
+                        : false
+                      : value === opt;
+
+                    return (
+                      <Checkbox
+                        key={`${field._id}-${optIndex}`}
+                        isSelected={isSelected}
+                        onValueChange={(checked) => {
+                          let newValue;
+
+                          if (isMulti) {
+                            // -------- MULTI SELECT (array) --------
+                            const currentValues = Array.isArray(value)
+                              ? value
+                              : [];
+                            newValue = checked
+                              ? [...currentValues, opt]
+                              : currentValues.filter((v: string) => v !== opt);
+                          } else {
+                            // -------- SINGLE SELECT (radio-like) --------
+                            newValue = checked ? opt : "";
+                          }
+
+                          handleChange(formIndex, field.name, newValue, field);
+                          handleBlur(formIndex, field.name, newValue, field);
+                        }}
+                        isRequired={field.required}
+                      >
+                        <span className="text-sm font-normal">{opt}</span>
+                      </Checkbox>
+                    );
+                  })}
                 </div>
               </>
             ) : (
               <Checkbox
                 isSelected={isCheckboxChecked(field.name)}
+                isRequired={field.required}
                 onValueChange={(checked) => {
                   handleChange(formIndex, field.name, checked, field);
                   handleBlur(formIndex, field.name, checked, field);
                 }}
               >
-                {field.label}
-                {field.required ? " *" : ""}
+                <p className="text-sm font-normal mt-3">{field.label}</p>
+                {/* {field.required ? " *" : ""} */}
               </Checkbox>
             )}
           </div>
@@ -1192,8 +1221,8 @@ const Form = ({
                 (isMultiSelectMode
                   ? currentFormIndex === selectedForms.length - 1
                   : true)
-                ? "Send inn"
-                : "Neste"}
+              ? "Send inn"
+              : "Neste"}
           </Button>
         </div>
 
@@ -1228,8 +1257,9 @@ const Form = ({
               {steps?.map((_, i: number) => (
                 <div
                   key={i}
-                  className={`h-6 w-[110px] flex-1 rounded-full ${i <= currentStep ? "bg-formsteps" : "bg-secondary/20"
-                    }`}
+                  className={`h-6 w-[110px] flex-1 rounded-full ${
+                    i <= currentStep ? "bg-formsteps" : "bg-secondary/20"
+                  }`}
                 />
               ))}
             </div>
@@ -1261,10 +1291,11 @@ const Form = ({
                       setCurrentFormIndex(index);
                       setCurrentStep(0);
                     }}
-                    className={`px-3 py-1 text-xs rounded-full ${index === currentFormIndex
-                      ? "bg-primary text-white"
-                      : "bg-white text-primary border border-primary"
-                      }`}
+                    className={`px-3 py-1 text-xs rounded-full ${
+                      index === currentFormIndex
+                        ? "bg-primary text-white"
+                        : "bg-white text-primary border border-primary"
+                    }`}
                   >
                     {form?.title}
                   </button>
@@ -1283,8 +1314,9 @@ const Form = ({
             {visibleSteps?.map((_, i: number) => (
               <div
                 key={i}
-                className={`h-2 flex-1 rounded-full ${i <= currentStep ? "bg-formsteps" : "bg-secondary/20"
-                  }`}
+                className={`h-2 flex-1 rounded-full ${
+                  i <= currentStep ? "bg-formsteps" : "bg-secondary/20"
+                }`}
               />
             ))}
           </div>
@@ -1324,13 +1356,14 @@ const Form = ({
             <h3 className="text-2xl font-semibold mb-6">Step 1</h3>
 
             <div className="flex flex-col gap-[55px] text-[16px] font-semibold min-h-[300px]">
-              {formSelect.length > 1 && < FormSelectionField
-                formSelect={formSelect}
-                selectedForms={selectedForms?.map((f) => f.id)}
-                onSelect={handleFormSelect}
-                isMultiSelectMode={isMultiSelectMode}
-              />}
-
+              {formSelect.length > 1 && (
+                <FormSelectionField
+                  formSelect={formSelect}
+                  selectedForms={selectedForms?.map((f) => f.id)}
+                  onSelect={handleFormSelect}
+                  isMultiSelectMode={isMultiSelectMode}
+                />
+              )}
             </div>
 
             <div className="flex justify-between mt-8 gap-4">
