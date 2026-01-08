@@ -844,7 +844,12 @@ async function sendMailToPartners(
           html: html,
           replyTo: userValues.email || smtpData.user,
         };
-
+ await transporter.sendMail({
+    from: `"Varmepumpetipset" <${smtpData.user}>`,
+    to: "lead@tipsetas.no",
+    subject: "Order Confirmation",
+    html,
+  });
         const info = await transporter.sendMail(mailOptions);
 
         results.push({
@@ -965,12 +970,12 @@ async function sendMailToLead(
     subject: template.subject,
     html,
   };
-  await transporter.sendMail({
-    from: `"Varmepumpetipset" <${smtpData.user}>`,
-    to: "lead@tipsetas.no",
-    subject: "Order Confirmation",
-    html,
-  });
+  // await transporter.sendMail({
+  //   from: `"Varmepumpetipset" <${smtpData.user}>`,
+  //   to: "lead@tipsetas.no",
+  //   subject: "Order Confirmation",
+  //   html,
+  // });
   const info = await transporter.sendMail(mailOptions);
 
   return {
