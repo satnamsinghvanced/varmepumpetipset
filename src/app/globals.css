@@ -99,7 +99,15 @@ body {
   .real-estate-content h3 {
     @apply mb-[24px] mt-[40px] text-[24px] lg:text-[40px] text-primary font-medium lg:leading-14 leading-6;
   }
-
+.real-estate-content ul {
+    @apply text-primary;
+  }
+   .real-estate-content ol {
+    @apply text-primary;
+  }
+    .real-estate-content li {
+    @apply text-primary;
+  }
   .real-estate-content p {
     @apply text-primary;
   }
