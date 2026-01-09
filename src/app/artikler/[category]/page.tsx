@@ -74,7 +74,7 @@ export async function generateMetadata({
       : ["meglertip", category, "real estate", "artikler"],
     type: ogType || "website",
     image: ogImage || null,
-    ogTitle: ogTitle || metaTitle || `${category} Artikler | Varmepumpetipset.no`,
+    ogTitle: ogTitle || metaTitle || category || ' Artikler | Varmepumpetipset.no',
     ogDescription:
       ogDescription ||
       metaDescription ||

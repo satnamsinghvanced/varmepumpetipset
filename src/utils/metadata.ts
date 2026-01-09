@@ -85,7 +85,7 @@ export async function generatePageMetadata({
   const pageTitle = title
     ? title === "Varmepumpetipset.no"
       ? `Varmepumpetipset.no`
-      : `${title} | Varmepumpetipset.no`
+      : `${title} `
     : "Varmepumpetipset.no";
 
   const ogFinalTitle = ogTitle ? `${ogTitle} | Varmepumpetipset.no` : pageTitle;
