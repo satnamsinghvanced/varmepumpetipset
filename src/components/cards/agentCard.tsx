@@ -34,13 +34,13 @@ const AgentCard = ({
       <div className="overflow-visible p-0">
         <div className="flex gap-6 w-full">
           <div className="flex justify-center items-center">
-            <div className="flex justify-center items-center pt-8 ">
+            <div className="flex justify-center items-center">
               <Image
                 src={"/images/realEstate.webp"}
                 width={120}
                 height={45}
                 alt={`${companyName} image`}
-                className="mb-6"
+                className=""
                 loading="lazy"
               />
             </div>
@@ -50,12 +50,11 @@ const AgentCard = ({
             <h6 className="font-semibold text-[32px] max-lg:!text-[20px] text-primary pb-0.5 leading-7">
               {companyName}
             </h6>
-            {averageRating && (
+            {(averageRating !== 0 && totalRating !== 0) && (
               <Star averageRating={averageRating} totalRating={totalRating} />
             )}
-
-            <div className="pt-3 flex gap-2 flex-wrap">
-              {features &&
+            <div className={`pt-3 flex gap-2 flex-wrap`}>
+              {(features && features.length > 0) &&
                 features
                   .slice(0, 4)
                   ?.map((features, index) => (
@@ -66,7 +65,7 @@ const AgentCard = ({
 
           <Link
             className="flex justify-center items-center w-36 h-10 max-sm:hidden bg-transparent border border-primary text-primary rounded-xl hover:bg-primary hover:text-background transition-all ease-in-out duration-300"
-            href={`/leverandorer/${slug ? slug.replace(/\s+/g, "") : "default_slug"
+            href={`/eiendomsmegler/${slug ? slug.replace(/\s+/g, "") : "default_slug"
               }`}
           >
             <span>Se profil</span>
@@ -81,10 +80,10 @@ const AgentCard = ({
           ></div>
           <Link
             className="px-8 !w-[185px] !h-[48px] mt-[24px] flex justify-center items-center sm:hidden bg-transparent border border-primary text-primary rounded-xl hover:bg-primary hover:text-background transition-all ease-in-out duration-300"
-            href={`/leverandorer/${slug ? slug.replace(/\s+/g, "") : "default_slug"
+            href={`/eiendomsmegler/${slug ? slug.replace(/\s+/g, "") : "default_slug"
               }`}
           >
-            <span>Se profil ddd</span>
+            <span>Se profil</span>
           </Link>
         </div>
       </div>
