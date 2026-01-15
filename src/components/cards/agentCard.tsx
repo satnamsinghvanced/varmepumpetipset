@@ -12,11 +12,11 @@ interface AgentCardProps {
   features?: string[];
   slug?: string;
   isRecommended?: boolean;
-   companyImage?: string;
+  companyImage?: string;
   icon?: string;
 }
 
-const AgentCard = async({
+const AgentCard = async ({
   companyName = "",
   averageRating = 0,
   totalRating = 0,
@@ -41,6 +41,8 @@ const AgentCard = async({
   }
   const finalSrc = isImageValid ? fullUrl : "/images/realEstate.webp";
 
+
+
   return (
     <div className="p-5 border border-dark/40 w-full relative bg-background rounded-lg overflow-hidden">
       {isRecommended && (
@@ -50,15 +52,15 @@ const AgentCard = async({
       )}
       <div className="overflow-visible p-0">
         <div className="flex gap-6 w-full">
-          <div className="flex justify-center items-center">
-            <div className="flex justify-center items-center">
+          <div className="flex justify-center items-start">
+            <div className="flex justify-center items-start">
               <Image
-               src={finalSrc}
+                src={finalSrc}
                 width={120}
                 height={45}
-                className=""
                 quality={100}
                 alt={companyName || "real estate"}
+                className=""
                 loading="lazy"
               />
             </div>

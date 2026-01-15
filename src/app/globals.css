@@ -5,22 +5,21 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont,
+    sans-serif;
 }
-
-
 
 ::-webkit-scrollbar {
   width: 12px;
   height: 12px;
 }
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+real-estate-content input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none !important;
   margin: 0 !important;
 }
 
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield !important; /* Firefox */
 }
 
@@ -45,14 +44,14 @@ body {
 
 @layer components {
   p {
-    @apply text-[14px] text-[16px]
+    @apply text-[14px] text-[16px];
   }
 
   .article-content h1 {
     @apply text-primary font-medium lg:text-[40px] text-[24px] lg:mb-4 mb-4 leading-[1.2];
   }
 
- .article-content h2 {
+  .article-content h2 {
     @apply text-primary font-medium lg:text-[40px] text-[22px] mt-8 lg:mb-4 mb-4 leading-[1.2];
   }
 
@@ -74,23 +73,32 @@ body {
 
   .article-content li {
     @apply list-disc !text-secondary;
-
   }
 
   .article-content p {
     @apply mb-4 text-[14px] lg:text-[16px] text-secondary;
   }
+  .article-content p a {
+    @apply mb-4 text-[14px] lg:text-[16px] !text-blue-500;
+  }
+  .article-content a {
+    @apply mb-4 text-[14px] lg:text-[16px] !text-blue-500;
+  }
 
   .eiendomsmegler-content h2 {
     @apply mb-4 text-[24px] lg:text-[48px] text-primary font-semibold lg:leading-16 leading-8;
-
   }
 
   .eiendomsmegler-content p {
     @apply mb-4 text-[14px] lg:text-[16px] text-primary;
-
   }
 
+  .eiendomsmegler-content p a {
+    @apply mb-4 text-[14px] lg:text-[16px] !text-blue-500;
+  }
+  .eiendomsmegler-content a {
+    @apply mb-4 text-[14px] lg:text-[16px] !text-blue-500;
+  }
   /* real-estate-content  */
   .real-estate-content h2 {
     @apply mb-[24px] mt-[40px] text-[24px] lg:text-[48px] text-primary font-semibold lg:leading-14 leading-6;
@@ -99,28 +107,35 @@ body {
   .real-estate-content h3 {
     @apply mb-[24px] mt-[40px] text-[24px] lg:text-[40px] text-primary font-medium lg:leading-14 leading-6;
   }
-.real-estate-content ul {
+  .real-estate-content ul {
     @apply text-primary;
   }
-   .real-estate-content ol {
+  .real-estate-content ol {
     @apply text-primary;
   }
-    .real-estate-content li {
+  .real-estate-content li {
     @apply text-primary;
+  }
+  .real-estate-content p a {
+    @apply mb-4 text-[14px] lg:text-[16px] !text-blue-500;
+  }
+
+  .real-estate-content a {
+    @apply mb-4 text-[14px] lg:text-[16px] !text-blue-500;
   }
   .real-estate-content p {
     @apply text-primary;
   }
 
   .ql-code-block-container {
-    @apply bg-primary/20 p-6 rounded-2xl
+    @apply bg-primary/20 p-6 rounded-2xl;
   }
 
-  .ql-code-block-container> :first-child {
-    @apply text-[20px] mb-2 lg:text-2xl font-bold text-primary
+  .ql-code-block-container > :first-child {
+    @apply text-[20px] mb-2 lg:text-2xl font-bold text-primary;
   }
 
-  .ql-code-block-container> :not(:first-child) {
+  .ql-code-block-container > :not(:first-child) {
     @apply text-[14px] lg:text-base;
   }
 
@@ -142,7 +157,6 @@ body {
   .hamburger-line-bottom-open {
     transform: translateY(-8px) rotate(-45deg);
   }
-
 }
 
 /* .article-content li::marker {
@@ -274,14 +288,14 @@ body {
 }
 
 @theme {
-  --color-primary: #2A4165;
-  --color-primarylight: #F5F7FF;
+  --color-primary: #2a4165;
+  --color-primarylight: #f5f7ff;
   --color-secondary: #686868;
   --color-dark: #161925;
-  --color-accent: #F8F9FD;
-  --color-background: #FFFFFF;
-  --color-cardbg: #23395B;
+  --color-accent: #f8f9fd;
+  --color-background: #ffffff;
+  --color-cardbg: #23395b;
   --color-navbarbg: #161925;
   --color-footerbg: #161925;
-  --color-formsteps: #27AE60
+  --color-formsteps: #27ae60;
 }
