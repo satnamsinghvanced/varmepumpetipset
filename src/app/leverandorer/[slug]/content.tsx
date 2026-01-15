@@ -38,7 +38,7 @@ const SlugContent = async ({
 
   //NOTE: dom't remove this variable, company images will be shown here from google drive
   const companyImageUrl =
-    `${placeData?.data?.companyImage}` || "/images/realEstate.webp";
+    placeData?.data?.companyImage;
   const companies = Array.isArray(placeData.data.companies)
     ? placeData.data.companies
     : [];
