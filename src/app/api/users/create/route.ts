@@ -659,7 +659,7 @@ const isWishesMatch = (partner: any, userValues: any) => {
   for (const wish of partnerWishes) {
     if (!wish.question || wish.question.trim() === "") {
       console.log("Wish question empty → FAIL");
-      return false;
+      continue;
     }
 
     const question = wish.question.trim();
@@ -889,16 +889,26 @@ async function getActiveEmailTemplate() {
 }
 
 async function getLeadEmailTemplate() {
-  const template = await EmailTemplate.findOne({
-    name: "To the lead when they complete a form",
+  let template = await EmailTemplate.findOne({
+    name: "Send to partner",
+    isActive: true,
   });
 
   if (!template) {
-    throw new Error("Lead email template not found or inactive");
+    console.warn("Lead template not found, using fallback template");
+    template = {
+      subject: "Thank you for your submission",
+      body: `
+        <p>Hi [Full name],</p>
+        <p>We have received your request. Your reference ID is [Id].</p>
+        <p>Best regards,<br/>Varmepumpetipset Team</p>
+      `,
+    };
   }
 
   return template;
 }
+
 
 function generateLeadEmail(
   userValues: any,

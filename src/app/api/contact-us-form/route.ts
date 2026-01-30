@@ -82,12 +82,13 @@ export async function POST(request: NextRequest) {
                 return (dataToSave as any)[key.trim()] || '';
             });
 
-            await transporter.sendMail({
+           const test= await transporter.sendMail({
                 from: `"Varmepumpetipset" <${smtpData.fromEmail}>`,
-                to: "hei@tipsetas.no",
+                to: cleanEmail,
                 subject: template.subject,
                 html: htmlBody,
             });
+            console.log(">>>>>>>>>>>>>>>",test);
 
             console.log("Partner form email sent!");
         } else {
